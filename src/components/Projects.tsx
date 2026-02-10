@@ -10,7 +10,7 @@ const Projects = () => {
   const filtered = filter === "All" ? projects : projects.filter(p => p.category === filter);
 
   return (
-    <section id="projects" className="py-24 px-6">
+    <section id="projects" className="py-24 px-6 bg-background relative z-20">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -29,11 +29,10 @@ const Projects = () => {
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                filter === cat
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${filter === cat
                   ? 'bg-primary text-primary-foreground glow-sm'
                   : 'bg-card border border-border text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
             >
               {cat}
             </button>

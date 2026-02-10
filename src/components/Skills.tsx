@@ -7,7 +7,7 @@ const Skills = () => {
   const activeSkills = skillCategories.find(c => c.name === activeCategory)?.skills || [];
 
   return (
-    <section id="skills" className="py-24 px-6 bg-secondary/30">
+    <section id="skills" className="py-24 px-6 bg-background relative z-20">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -27,11 +27,10 @@ const Skills = () => {
             <button
               key={cat.name}
               onClick={() => setActiveCategory(cat.name)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                activeCategory === cat.name
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${activeCategory === cat.name
                   ? 'bg-primary text-primary-foreground glow-sm'
                   : 'bg-card border border-border text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
             >
               {cat.name}
             </button>

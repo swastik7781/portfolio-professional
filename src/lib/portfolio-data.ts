@@ -7,6 +7,7 @@ export const personalInfo = {
   linkedin: "https://linkedin.com/in/swastikbhardwaj",
   email: "swastikbhardwaj@example.com",
   resumeUrl: "#",
+  profilePic: "/profile.jpg",
 };
 
 export const stats = [
