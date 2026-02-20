@@ -132,11 +132,11 @@ const Certifications = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6"
             onClick={() => setSelectedCert(null)}
           >
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-background/90 backdrop-blur-md" />
 
             {/* Modal Content */}
             <motion.div
@@ -144,7 +144,7 @@ const Certifications = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-5xl h-[85vh] bg-background border border-border shadow-2xl rounded-xl overflow-hidden flex flex-col z-[101]"
+              className="relative w-full max-w-5xl h-[85vh] bg-background border border-border shadow-2xl rounded-xl overflow-hidden flex flex-col z-[10000]"
               onClick={e => e.stopPropagation()}
               onKeyDown={handleKeyDown}
               tabIndex={-1}
