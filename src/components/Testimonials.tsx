@@ -45,28 +45,24 @@ const Testimonials = () => {
               "{t.quote}"
             </p>
 
-            {/* Bottom Section: Photo + Detail + Stars */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-4">
-              {/* Photo & Name */}
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center">
-                  {t.photo ? (
-                    <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-muted-foreground font-mono-code text-xl">{t.name.charAt(0)}</span>
-                  )}
-                </div>
-                <div>
-                  <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
-                  <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{t.role}</div>
-                </div>
-              </div>
+            {/* Stars */}
+            <div className="flex justify-center gap-1 mb-6">
+              {Array.from({ length: t.rating }).map((_, i) => (
+                <Star key={i} size={14} className="fill-primary text-primary" />
+              ))}
+            </div>
 
-              {/* Stars */}
-              <div className="flex gap-1">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} size={14} className="fill-primary text-primary" />
-                ))}
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-16 h-16 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center">
+                {t.photo ? (
+                  <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-muted-foreground font-mono-code text-xl">{t.name.charAt(0)}</span>
+                )}
+              </div>
+              <div>
+                <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
+                <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{t.role}</div>
               </div>
             </div>
           </motion.div>
