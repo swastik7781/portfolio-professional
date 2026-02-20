@@ -144,13 +144,13 @@ const Certifications = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-5xl h-[85vh] bg-card border border-border rounded-xl shadow-elevated overflow-hidden flex flex-col"
+              className="relative w-full max-w-5xl h-[85vh] bg-background border border-border shadow-2xl rounded-xl overflow-hidden flex flex-col z-[101]"
               onClick={e => e.stopPropagation()}
               onKeyDown={handleKeyDown}
               tabIndex={-1}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-border bg-secondary/30">
+              <div className="flex items-center justify-between p-4 border-b border-border bg-card">
                 <div className="flex items-center gap-2">
                   <Award size={16} className="text-primary" />
                   <span className="font-mono-code text-sm font-medium text-foreground">Certificate Preview</span>
