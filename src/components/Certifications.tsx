@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { certifications, achievements as achievementsList } from '@/lib/portfolio-data';
 import { ExternalLink, Award, Code2, Trophy, Briefcase, FileDown, X } from 'lucide-react';
@@ -7,6 +8,12 @@ const achievementIcons = [Trophy, Code2, Briefcase, Award];
 
 const Certifications = () => {
   const [selectedCert, setSelectedCert] = useState<string | null>(null);
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Close modal on escape key
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -125,67 +132,69 @@ const Certifications = () => {
         </div>
       </div>
 
-      {/* Certificate Preview Modal */}
-      <AnimatePresence>
-        {selectedCert && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6"
-            onClick={() => setSelectedCert(null)}
-          >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-background/90 backdrop-blur-md" />
-
-            {/* Modal Content */}
+      {/* Certificate Preview Modal - rendered via Portal to prevent z-index stacking context issues */}
+      {isClient && createPortal(
+        <AnimatePresence>
+          {selectedCert && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-5xl h-[85vh] bg-background border border-border shadow-2xl rounded-xl overflow-hidden flex flex-col z-[10000]"
-              onClick={e => e.stopPropagation()}
-              onKeyDown={handleKeyDown}
-              tabIndex={-1}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6"
+              onClick={() => setSelectedCert(null)}
             >
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-border bg-card">
-                <div className="flex items-center gap-2">
-                  <Award size={16} className="text-primary" />
-                  <span className="font-mono-code text-sm font-medium text-foreground">Certificate Preview</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <a
-                    href={selectedCert}
-                    download
-                    className="h-8 px-3 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-2 font-mono-code text-xs font-medium"
-                    title="Download"
-                  >
-                    <FileDown size={14} /> Download
-                  </a>
-                  <button
-                    onClick={() => setSelectedCert(null)}
-                    className="w-8 h-8 rounded-md hover:bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-              </div>
+              {/* Backdrop */}
+              <div className="absolute inset-0 bg-background/90 backdrop-blur-md" />
 
-              {/* PDF Viewer */}
-              <div className="flex-1 w-full bg-black/5 dark:bg-black/20 p-2 sm:p-4">
-                <iframe
-                  src={`${selectedCert}#toolbar=0`}
-                  title="Certificate Preview"
-                  className="w-full h-full rounded-lg border border-border/50 shadow-inner bg-white dark:bg-[#323639]"
-                />
-              </div>
+              {/* Modal Content */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="relative w-full max-w-5xl h-[85vh] bg-background border border-border shadow-2xl rounded-xl overflow-hidden flex flex-col z-[100000]"
+                onClick={e => e.stopPropagation()}
+                onKeyDown={handleKeyDown}
+                tabIndex={-1}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-border bg-card">
+                  <div className="flex items-center gap-2">
+                    <Award size={16} className="text-primary" />
+                    <span className="font-mono-code text-sm font-medium text-foreground">Certificate Preview</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={selectedCert}
+                      download
+                      className="h-8 px-3 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-2 font-mono-code text-xs font-medium"
+                      title="Download"
+                    >
+                      <FileDown size={14} /> Download
+                    </a>
+                    <button
+                      onClick={() => setSelectedCert(null)}
+                      className="w-8 h-8 rounded-md hover:bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* PDF Viewer */}
+                <div className="flex-1 w-full bg-black/5 dark:bg-black/20 p-2 sm:p-4">
+                  <iframe
+                    src={`${selectedCert}#toolbar=0`}
+                    title="Certificate Preview"
+                    className="w-full h-full rounded-lg border border-border/50 shadow-inner bg-white dark:bg-[#323639]"
+                  />
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 };

@@ -11,7 +11,7 @@ const Testimonials = () => {
   const next = () => setCurrent((current + 1) % testimonials.length);
 
   return (
-    <section className="py-24 px-4 sm:px-6 bg-secondary/20 relative z-20">
+    <section className="py-24 px-4 sm:px-6 bg-secondary/20">
       <div className="max-w-5xl mx-auto">
 
         {/* Section header */}
