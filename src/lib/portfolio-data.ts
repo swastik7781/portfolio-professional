@@ -213,7 +213,7 @@ export const testimonials = [
     company: "",
     quote: "Swastik demonstrates exceptional problem-solving skills and a strong understanding of full-stack development. His ability to architect clean solutions and deliver production-ready code is impressive for his experience level.",
     rating: 5,
-    photo: "",
+    photo: "/photos/sribatsa.png",
   },
   {
     name: "Abhijeet Dash",
@@ -221,7 +221,7 @@ export const testimonials = [
     company: "",
     quote: "Working with Swastik was a great experience. He brings both technical depth and a collaborative mindset to every project. His code quality and attention to detail consistently exceeded expectations.",
     rating: 5,
-    photo: "",
+    photo: "/photos/abhijeet.jpg",
   },
   {
     name: "Auroshikha Tripathy",
@@ -229,7 +229,7 @@ export const testimonials = [
     company: "",
     quote: "Swastik has an incredible ability to break down complex problems into clean, elegant solutions. His dedication to writing maintainable code and his eye for design make him stand out as a developer.",
     rating: 5,
-    photo: "",
+    photo: "/photos/auroshikha.png",
   },
 ];
 
