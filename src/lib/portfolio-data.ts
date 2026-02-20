@@ -234,7 +234,23 @@ export const testimonials = [
 ];
 
 export const certifications = [
-  { title: "MERN Stack Development", issuer: "CodeBeat", year: "2024" },
-  { title: "Spring Boot & Angular Training", issuer: "Enterprise Program", year: "2025" },
-  { title: "Joy of Computing with Python", issuer: "NPTEL", year: "2024", score: "90%" },
+  {
+    title: "MERN Stack Development",
+    issuer: "CodeBeat",
+    year: "2024",
+    file: "/certificates/mern.pdf"
+  },
+  {
+    title: "Spring Boot & Angular Training",
+    issuer: "Enterprise Program",
+    year: "2025",
+    file: "/certificates/springboot.pdf"
+  },
+  {
+    title: "Joy of Computing with Python",
+    issuer: "NPTEL",
+    year: "2024",
+    score: "90%",
+    file: "/certificates/python.pdf"
+  },
 ];

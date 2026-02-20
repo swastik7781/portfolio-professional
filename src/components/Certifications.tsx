@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Award, Code2, Trophy, Briefcase } from 'lucide-react';
 import { certifications, achievements as achievementsList } from '@/lib/portfolio-data';
+import { ExternalLink, Award, Code2, Trophy, Briefcase, FileDown } from 'lucide-react';
 
 const achievementIcons = [Trophy, Code2, Briefcase, Award];
 
@@ -59,27 +59,60 @@ const Certifications = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
-                className="card-base card-hover p-5 flex flex-col gap-3"
+                className="card-base card-hover p-5 flex flex-col gap-4 relative group"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-                    <Award size={16} className="text-primary" />
+                <div className="flex items-start gap-4 h-full">
+                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0 border border-border/50 group-hover:border-primary/30 transition-colors duration-300">
+                    <Award size={18} className="text-primary" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-display text-sm font-semibold text-foreground leading-snug">
-                      {cert.title}
-                    </h3>
-                    <p className="font-mono-code text-xs text-muted-foreground mt-0.5">
-                      {cert.issuer} · {cert.year}
-                    </p>
+                  <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
+                    <div>
+                      <h3 className="font-display text-sm font-semibold text-foreground leading-snug">
+                        {cert.title}
+                      </h3>
+                      <p className="font-mono-code text-xs text-muted-foreground mt-1">
+                        {cert.issuer} · {cert.year}
+                      </p>
+                    </div>
+
+                    {/* Score / Links row */}
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/60">
+                      {'score' in cert && cert.score ? (
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono-code text-[11px] text-muted-foreground">Score</span>
+                          <span className="font-mono-code text-[11px] font-bold text-green-500">{cert.score}</span>
+                        </div>
+                      ) : (
+                        <div /> /* Empty div for flex spacing if no score */
+                      )}
+
+                      <div className="flex items-center gap-3">
+                        {cert.file && (
+                          <>
+                            <a
+                              href={cert.file}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 font-mono-code text-[11px] uppercase tracking-wider"
+                              title="View Certificate"
+                            >
+                              <ExternalLink size={13} /> View
+                            </a>
+                            <div className="w-px h-3 bg-border" />
+                            <a
+                              href={cert.file}
+                              download
+                              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 font-mono-code text-[11px] uppercase tracking-wider"
+                              title="Download Certificate"
+                            >
+                              <FileDown size={13} />
+                            </a>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {'score' in cert && cert.score && (
-                  <div className="flex items-center gap-2 pt-1 border-t border-border">
-                    <span className="font-mono-code text-xs text-muted-foreground">Score</span>
-                    <span className="font-mono-code text-xs font-bold text-green-500">{cert.score}</span>
-                  </div>
-                )}
               </motion.div>
             ))}
           </div>
