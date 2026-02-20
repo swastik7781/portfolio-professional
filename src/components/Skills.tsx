@@ -148,20 +148,26 @@ const Skills = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-12 pt-8 border-t border-border"
         >
-          <p className="font-mono-code text-xs text-muted-foreground tracking-widest uppercase mb-4">
+          <p className="font-mono-code text-xs text-muted-foreground tracking-widest uppercase mb-6 text-center sm:text-left">
             All Technologies
           </p>
-          <div className="flex flex-wrap gap-2">
-            {skillCategories.flatMap(cat => cat.skills).map(skill => (
-              <div
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
+            {skillCategories.flatMap(cat => cat.skills).map((skill, index) => (
+              <motion.div
                 key={skill.name}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-card border border-border rounded-lg hover:border-primary/30 hover:bg-secondary transition-colors duration-200 group"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.3, delay: index * 0.02 }}
+                className="flex flex-col items-center justify-center gap-3 p-4 bg-card/40 border border-border/50 rounded-xl hover:border-primary/40 hover:bg-secondary/40 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-300 group"
               >
-                <SkillIcon icon={skill.icon} name={skill.name} />
-                <span className="text-xs text-muted-foreground group-hover:text-foreground font-mono-code transition-colors duration-200">
+                <div className="w-8 h-8 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                  <SkillIcon icon={skill.icon} name={skill.name} />
+                </div>
+                <span className="text-[11px] text-muted-foreground group-hover:text-foreground font-mono-code transition-colors duration-300 text-center whitespace-nowrap">
                   {skill.name}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>

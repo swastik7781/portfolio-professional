@@ -113,7 +113,7 @@ const Hero = ({ onOpenConsole, onLogoClick, visitorName }: HeroProps) => {
       />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-24 md:py-32">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
 
           {/* Profile photo — ROUND, with 4-click easter egg */}
           <motion.div
@@ -147,7 +147,7 @@ const Hero = ({ onOpenConsole, onLogoClick, visitorName }: HeroProps) => {
           </motion.div>
 
           {/* Text content */}
-          <div className="flex-1 text-center md:text-left">
+          <div className="text-center md:text-left max-w-2xl">
             {/* Greeting */}
             <motion.p
               {...(reducedMotion ? {} : fadeUp(0.1))}

@@ -17,7 +17,7 @@ export const stats = [
   { label: "CGPA", value: "9.31" },
   { label: "Lines of Code", value: "40K+" },
   { label: "Projects Built", value: "6+" },
-  { label: "Internship", value: "CodeBeat" },
+  { label: "Learning Spirit", value: "∞" },
 ];
 
 export const achievements = [
@@ -140,14 +140,14 @@ export const projects = [
 export const timelineItems = [
   {
     type: "education",
-    date: "2009 – 2021",
+    date: "2020-21",
     title: "10th from K.V. No.1 BBSR",
     subtitle: "AISSE — 96.00%",
     description: "Completed schooling at Kendriya Vidyalaya No.1 Bhubaneswar with 96% in AISSE (CBSE Board).",
   },
   {
     type: "education",
-    date: "2021 – 2023",
+    date: "2022-23",
     title: "12th from K.V. No.1 BBSR",
     subtitle: "AISSCE — 91.00%",
     description: "Completed higher secondary at Kendriya Vidyalaya No.1 Bhubaneswar with 91% in AISSCE (CBSE Board).",
