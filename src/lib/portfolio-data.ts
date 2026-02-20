@@ -251,6 +251,6 @@ export const certifications = [
     issuer: "NPTEL",
     year: "2024",
     score: "90%",
-    file: "/certificates/python.pdf"
+    file: "/certificates/nptel-python.pdf"
   },
 ];
