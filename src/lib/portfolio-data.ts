@@ -209,7 +209,7 @@ export const experiences = [
 export const testimonials = [
   {
     name: "T. Sribatsa Patro",
-    role: "Mentor & Guide",
+    role: "Ex Developer at Rumango Pvt Ltd",
     company: "",
     quote: "Swastik demonstrates exceptional problem-solving skills and a strong understanding of full-stack development. His ability to architect clean solutions and deliver production-ready code is impressive for his experience level.",
     rating: 5,
@@ -217,7 +217,7 @@ export const testimonials = [
   },
   {
     name: "Abhijeet Dash",
-    role: "Colleague & Collaborator",
+    role: "Intern at IIT Ropar",
     company: "",
     quote: "Working with Swastik was a great experience. He brings both technical depth and a collaborative mindset to every project. His code quality and attention to detail consistently exceeded expectations.",
     rating: 5,
@@ -225,7 +225,7 @@ export const testimonials = [
   },
   {
     name: "Auroshikha Tripathy",
-    role: "Peer & Collaborator",
+    role: "Senior Developer",
     company: "",
     quote: "Swastik has an incredible ability to break down complex problems into clean, elegant solutions. His dedication to writing maintainable code and his eye for design make him stand out as a developer.",
     rating: 5,
