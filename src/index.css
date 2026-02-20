@@ -1,115 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
-
 @layer base {
   :root {
+    /* Premium light theme — warm, clean, high contrast */
     --background: 0 0% 98%;
-    --foreground: 220 20% 10%;
+    --foreground: 220 25% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card-foreground: 220 25% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
-    --primary: 220 70% 50%;
+    --popover-foreground: 220 25% 10%;
+    --primary: 217 85% 48%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 15% 92%;
-    --secondary-foreground: 220 20% 10%;
-    --muted: 220 15% 95%;
-    --muted-foreground: 220 10% 45%;
-    --accent: 250 60% 55%;
+    --secondary: 220 14% 93%;
+    --secondary-foreground: 220 25% 10%;
+    --muted: 220 14% 93%;
+    --muted-foreground: 220 12% 42%;
+    --accent: 245 58% 52%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 90%;
-    --input: 220 15% 90%;
-    --ring: 220 70% 50%;
-    --radius: 0.75rem;
-    --terminal: 220 25% 8%;
-    --terminal-foreground: 120 60% 70%;
-    --terminal-accent: 220 70% 60%;
-    --glow: 220 70% 50%;
+    --border: 220 13% 86%;
+    --input: 220 13% 86%;
+    --ring: 217 85% 48%;
+    --radius: 0.625rem;
+    --terminal: 220 14% 96%;
+    --terminal-foreground: 142 76% 36%;
+    --terminal-accent: 217 85% 48%;
+    --glow: 217 85% 48%;
+    --surface: 220 20% 96%;
+    --surface-elevated: 0 0% 100%;
 
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 220 25% 10%;
+    --sidebar-primary: 217 85% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 93%;
+    --sidebar-accent-foreground: 220 25% 10%;
+    --sidebar-border: 220 13% 86%;
+    --sidebar-ring: 217 85% 48%;
   }
 
   .dark {
-    --background: 222 30% 6%;
-    --foreground: 210 20% 92%;
-    --card: 222 25% 9%;
-    --card-foreground: 210 20% 92%;
-    --popover: 222 25% 9%;
-    --popover-foreground: 210 20% 92%;
-    --primary: 220 70% 55%;
+    /* Deep charcoal system */
+    --background: 222 18% 7%;
+    --foreground: 210 16% 90%;
+    --card: 222 16% 10%;
+    --card-foreground: 210 16% 90%;
+    --popover: 222 16% 10%;
+    --popover-foreground: 210 16% 90%;
+    --primary: 217 91% 58%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 20% 14%;
-    --secondary-foreground: 210 20% 92%;
-    --muted: 220 20% 14%;
-    --muted-foreground: 220 15% 55%;
-    --accent: 250 60% 60%;
+    --secondary: 222 14% 14%;
+    --secondary-foreground: 210 16% 90%;
+    --muted: 222 14% 14%;
+    --muted-foreground: 220 10% 52%;
+    --accent: 245 55% 62%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 62% 30%;
+    --destructive: 0 62% 42%;
     --destructive-foreground: 210 40% 98%;
-    --border: 220 20% 16%;
-    --input: 220 20% 16%;
-    --ring: 220 70% 55%;
-    --terminal: 220 30% 5%;
-    --terminal-foreground: 120 60% 70%;
-    --terminal-accent: 220 70% 65%;
-    --glow: 220 70% 55%;
+    --border: 222 14% 16%;
+    --input: 222 14% 16%;
+    --ring: 217 91% 58%;
+    --terminal: 222 25% 5%;
+    --terminal-foreground: 142 71% 65%;
+    --terminal-accent: 217 91% 65%;
+    --glow: 217 91% 58%;
+    --surface: 222 16% 10%;
+    --surface-elevated: 222 14% 13%;
 
-    --sidebar-background: 222 30% 8%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 222 18% 8%;
+    --sidebar-foreground: 210 16% 90%;
+    --sidebar-primary: 217 91% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 222 14% 14%;
+    --sidebar-accent-foreground: 210 16% 90%;
+    --sidebar-border: 222 14% 16%;
+    --sidebar-ring: 217 91% 58%;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
-  body {
-    @apply bg-background text-foreground font-sans;
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
-  }
+
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-size: 16px;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+    font-size: 1rem;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
   }
 }
 
 @layer utilities {
+
+  /* Typography */
   .font-mono-code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
   }
+
   .font-display {
     font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
   }
+
+  .font-body {
+    font-family: 'Inter', 'Space Grotesk', sans-serif;
+  }
+
+  /* Text gradient — used sparingly */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
   }
+
+  /* Elevation shadows — no glow, real depth */
+  .shadow-card {
+    box-shadow:
+      0 1px 3px hsl(0 0% 0% / 0.06),
+      0 4px 12px hsl(0 0% 0% / 0.08);
+  }
+
+  .shadow-card-hover {
+    box-shadow:
+      0 2px 8px hsl(0 0% 0% / 0.08),
+      0 8px 24px hsl(0 0% 0% / 0.12);
+  }
+
+  .shadow-elevated {
+    box-shadow:
+      0 4px 16px hsl(0 0% 0% / 0.1),
+      0 16px 40px hsl(0 0% 0% / 0.14);
+  }
+
+  /* Glow — only on active/focus/hover, never permanent */
   .glow-sm {
-    box-shadow: 0 0 15px -3px hsl(var(--glow) / 0.3);
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.15), 0 0 20px -4px hsl(var(--glow) / 0.25);
   }
+
   .glow-md {
-    box-shadow: 0 0 30px -5px hsl(var(--glow) / 0.3);
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.2), 0 0 32px -6px hsl(var(--glow) / 0.3);
   }
+
+  /* Grid background */
   .grid-bg {
-    background-image: 
-      linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px);
-    background-size: 60px 60px;
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Dot background */
+  .dot-bg {
+    background-image: radial-gradient(circle, hsl(var(--border) / 0.6) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* Section spacing */
+  .section-padding {
+    @apply py-24 px-6;
+  }
+
+  .section-container {
+    @apply max-w-5xl mx-auto;
+  }
+
+  /* Section heading — larger, more presence */
+  .section-label {
+    @apply font-mono-code text-xs text-primary tracking-widest uppercase mb-3;
+  }
+
+  .section-title {
+    @apply font-display text-4xl sm:text-5xl font-bold text-foreground mb-2 tracking-tight;
+  }
+
+  .section-divider {
+    @apply w-10 h-0.5 bg-primary rounded-full mb-10;
+  }
+
+  /* Card base */
+  .card-base {
+    @apply bg-card border border-border rounded-xl shadow-card transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm transition-all duration-200 hover:opacity-90 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-2.5 rounded-lg border border-border text-foreground font-semibold text-sm bg-transparent transition-all duration-200 hover:bg-secondary active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-lg text-muted-foreground font-medium text-sm transition-all duration-200 hover:text-foreground hover:bg-secondary active:scale-95;
+  }
+
+  /* Skill bar */
+  .skill-bar-track {
+    @apply w-full h-1.5 bg-secondary rounded-full overflow-hidden;
+  }
+
+  .skill-bar-fill {
+    @apply h-full bg-primary rounded-full;
+  }
+
+  /* Timeline */
+  .timeline-line {
+    @apply absolute left-4 top-0 bottom-0 w-px bg-border;
+  }
+
+  .timeline-dot {
+    @apply absolute left-4 w-2.5 h-2.5 rounded-full bg-primary border-2 border-background -translate-x-1/2 mt-1.5 z-10;
+  }
+
+  /* Light mode — ensure good contrast on cards and sections */
+  :root .card-base {
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05), 0 4px 12px hsl(0 0% 0% / 0.06);
+  }
+
+  :root .card-hover:hover {
+    box-shadow: 0 2px 8px hsl(0 0% 0% / 0.07), 0 8px 24px hsl(0 0% 0% / 0.09);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Custom cursor — desktop only */
+  @media (pointer: fine) {
+    .cursor-none-desktop {
+      cursor: none;
+    }
   }
 }

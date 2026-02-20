@@ -1,26 +1,73 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
-    <title>Swastik's Dev Hub</title>
-    <meta name="description" content="Personal Portfolio of Swastik Bhardwaj" />
-    <meta name="author" content="Swastik Bhardwaj" />
+<html lang="en" data-theme="dark">
 
-    <!-- TODO: Update og:title to match your application name -->
-    <meta property="og:title" content="Swastik's Dev Hub" />
-    <meta property="og:description" content="Personal Portfolio of Swastik Bhardwaj" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/profile.jpg" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@swastikbhardwaj" />
-    <meta name="twitter:image" content="/profile.jpg" />
-  </head>
+  <!-- Primary Meta -->
+  <title>Swastik Bhardwaj — Full Stack Developer</title>
+  <meta name="description"
+    content="Full Stack Developer building structured digital systems. Specializing in MERN Stack, Spring Boot, and scalable web architecture." />
+  <meta name="author" content="Swastik Bhardwaj" />
+  <meta name="keywords"
+    content="Swastik Bhardwaj, Full Stack Developer, MERN Stack, React, Node.js, Spring Boot, Web Developer, Portfolio" />
+  <meta name="theme-color" content="#0F1115" />
+  <meta name="color-scheme" content="dark light" />
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://swastikbhardwaj.vercel.app/" />
+  <meta property="og:title" content="Swastik Bhardwaj — Full Stack Developer" />
+  <meta property="og:description"
+    content="Full Stack Developer building structured digital systems. Specializing in MERN Stack, Spring Boot, and scalable web architecture." />
+  <meta property="og:image" content="https://swastikbhardwaj.vercel.app/og-image.png" />
+  <meta property="og:site_name" content="Swastik Bhardwaj" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://swastikbhardwaj.vercel.app/" />
+  <meta name="twitter:title" content="Swastik Bhardwaj — Full Stack Developer" />
+  <meta name="twitter:description" content="Full Stack Developer building structured digital systems." />
+  <meta name="twitter:image" content="https://swastikbhardwaj.vercel.app/og-image.png" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://swastikbhardwaj.vercel.app/" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Swastik Bhardwaj",
+      "url": "https://swastikbhardwaj.vercel.app",
+      "jobTitle": "Full Stack Developer",
+      "sameAs": [
+        "https://github.com/swastikbhardwaj",
+        "https://linkedin.com/in/swastikbhardwaj"
+      ]
+    }
+    </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function () {
+      emailjs.init({
+        publicKey: "YOUR_PUBLIC_KEY",
+      });
+    })();
+  </script>
+</body>
+
 </html>
