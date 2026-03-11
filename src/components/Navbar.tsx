@@ -173,7 +173,16 @@ const Navbar = ({ theme, toggleTheme, onOpenConsole, onOpenPalette, activeSectio
                     <a
                       key={link.href}
                       href={link.href}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMobileOpen(false);
+                        const element = document.getElementById(sectionId);
+                        if (element) {
+                          setTimeout(() => {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                          }, 300);
+                        }
+                      }}
                       className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ${isActive
                         ? 'bg-secondary text-foreground'
                         : 'text-muted-foreground hover:text-foreground hover:bg-secondary'

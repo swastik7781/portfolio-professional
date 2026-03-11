@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, Quote, ExternalLink } from 'lucide-react';
 import { testimonials } from '@/lib/portfolio-data';
 
 const Testimonials = () => {
@@ -63,6 +63,18 @@ const Testimonials = () => {
               <div>
                 <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
                 <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{t.role}</div>
+                {t.portfolio && (
+                  <motion.a
+                    href={t.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-primary/20 transition-all duration-300"
+                  >
+                    View Portfolio <ExternalLink size={12} />
+                  </motion.a>
+                )}
               </div>
             </div>
           </motion.div>

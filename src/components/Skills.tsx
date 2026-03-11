@@ -25,7 +25,7 @@ const SkillIcon = ({ icon, name }: { icon: string; name: string }) => {
     github: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
     vscode: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',
     postman: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
-    linux: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+    eclipse: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/eclipse/eclipse-original.svg',
     api: null,
   };
 
@@ -108,33 +108,22 @@ const Skills = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
           >
             {activeSkills.map((skill, i) => (
               <motion.div
                 key={skill.name}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="card-base card-hover p-5"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05, duration: 0.4 }}
+                className="card-base card-hover p-4 flex flex-col items-center justify-center gap-3 group text-center"
               >
-                <div className="flex justify-between items-center mb-3">
-                  <div className="flex items-center gap-3">
-                    <SkillIcon icon={skill.icon} name={skill.name} />
-                    <span className="font-medium text-sm text-foreground">{skill.name}</span>
-                  </div>
-                  <span className="font-mono-code text-xs text-muted-foreground">
-                    {skill.proficiency}%
-                  </span>
+                <div className="w-12 h-12 rounded-xl bg-card border border-border/50 group-hover:border-primary/40 group-hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] flex items-center justify-center transition-all duration-300">
+                  <SkillIcon icon={skill.icon} name={skill.name} />
                 </div>
-                <div className="skill-bar-track">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${skill.proficiency}%` }}
-                    transition={{ duration: 0.8, delay: i * 0.06, ease: 'easeOut' }}
-                    className="skill-bar-fill"
-                  />
-                </div>
+                <span className="font-medium text-sm text-foreground group-hover:text-primary transition-colors duration-300">
+                  {skill.name}
+                </span>
               </motion.div>
             ))}
           </motion.div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Star } from 'lucide-react';
+import { toast } from 'sonner';
 import { projects, type ProjectCategory } from '@/lib/portfolio-data';
 
 const categories: ProjectCategory[] = ["All", "Full Stack", "Machine Learning"];
@@ -101,6 +102,14 @@ const Projects = () => {
                         href={project.live}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => {
+                          if (project.title === "Portfolio Website") {
+                            e.preventDefault();
+                            toast("You're already here, brother/sister! 😎✨", {
+                              description: "Look around! Enjoy exploring the custom animations and design.",
+                            });
+                          }
+                        }}
                         className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all duration-200"
                         aria-label="Live demo"
                       >

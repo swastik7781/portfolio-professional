@@ -26,6 +26,34 @@ const COMMANDS: Record<string, string> = {
   whoami: "Who am I?",
   clear: "Clear console output",
   easteregg: "???",
+  exit: "Close the terminal",
+  pwd: "Print working directory",
+  ls: "List directory contents",
+  cd: "Change directory",
+  date: "Display current date and time",
+  echo: "Print arguments to the standard output",
+  sudo: "Execute a command as superuser",
+  ping: "Send ICMP ECHO_REQUEST to network hosts",
+  neofetch: "Display system information",
+  matrix: "Enter the matrix",
+  joke: "Tell a programming joke",
+  quote: "Get an inspirational quote",
+  history: "Show command history",
+  npm: "Node package manager",
+  git: "the stupid content tracker",
+  vim: "Vi IMproved, a programmer's text editor",
+  rm: "Remove files or directories",
+  cat: "Concatenate files and print on the standard output",
+  grep: "Print lines that match patterns",
+  kill: "Terminate a process",
+  top: "Display Linux processes",
+  curl: "Transfer a URL",
+  wget: "The non-interactive network downloader",
+  ssh: "OpenSSH remote login client",
+  docker: "A self-sufficient runtime for containers",
+  python: "Python interactive shell",
+  brew: "The Missing Package Manager for macOS",
+  apt: "command-line interface",
 };
 
 const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleProps) => {
@@ -115,7 +143,7 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
         addLine('output', '☀️ Light mode activated.');
         break;
       case 'whoami':
-        addLine('output', `\n${personalInfo.name} — ${personalInfo.title}\n`);
+        addLine('output', `\n${personalInfo.name} — ${personalInfo.title}\nVisitor to this terminal.\n`);
         break;
       case 'clear':
         setLines([]);
@@ -124,8 +152,77 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
         addLine('output', '🎉 You found a secret! Launching surprise...');
         onEasterEgg();
         break;
+      case 'exit':
+        onClose();
+        break;
+      case 'pwd':
+        addLine('output', '/home/swastik/portfolio');
+        break;
+      case 'ls':
+        addLine('output', 'drwxr-xr-x 2 swastik swastik 4096 .github\ndrwxr-xr-x 3 swastik swastik 4096 public\ndrwxr-xr-x 4 swastik swastik 4096 src\n-rw-r--r-- 1 swastik swastik 1024 package.json\n-rw-r--r-- 1 swastik swastik 2341 README.md');
+        break;
+      case 'date':
+        addLine('output', new Date().toString());
+        break;
+      case 'echo':
+        addLine('output', '(Provides echo functionality. Try typing something else!)');
+        break;
+      case 'sudo':
+        addLine('error', 'swastik is not in the sudoers file. This incident will be reported.');
+        break;
+      case 'ping':
+        addLine('output', 'PONG! Network is reachable (0.001ms latency).');
+        break;
+      case 'neofetch':
+        addLine('output', `\n    .-------------.\n   |  Portfolio  |  OS: Web Browser\n   '-------------'  Host: Swastik's Server\n        |   |       Kernel: React 18 / Vite\n        |   |       Uptime: 99.99%\n        |___|       Shell: TSX Console Component\n                    Theme: Swastik Custom\n                    Icons: Lucide React\n                    Terminal: DevConsole v1.0\n`);
+        break;
+      case 'matrix':
+        addLine('output', 'Wake up, Neo...\nThe matrix has you...\nFollow the white rabbit.');
+        onThemeChange('dark');
+        break;
+      case 'joke':
+        addLine('output', 'Why do programmers prefer dark mode?\nBecause light attracts bugs.');
+        break;
+      case 'quote':
+        addLine('output', `"${personalInfo.philosophy}"\n- Swastik Bhardwaj`);
+        break;
+      case 'history':
+        history.forEach((h, i) => addLine('output', `  ${i + 1}  ${h}`));
+        break;
+      case 'npm':
+      case 'docker':
+      case 'git':
+      case 'python':
+      case 'brew':
+      case 'apt':
+        addLine('output', `Usage: ${cmd} <command>\n\nThis is a simulation. The real ${cmd} is not available here.`);
+        break;
+      case 'rm':
+        addLine('error', 'rm: cannot remove: Permission denied (Nice try!)');
+        break;
+      case 'cd':
+        addLine('output', 'Directory changed. Path tracked.');
+        break;
+      case 'cat':
+      case 'grep':
+      case 'kill':
+      case 'top':
+      case 'curl':
+      case 'wget':
+      case 'ssh':
+        addLine('output', `${cmd}: command simulated successfully.`);
+        break;
+      case 'vim':
+      case 'emacs':
+        addLine('output', 'Error: Browser lacks raw terminal capabilities. Cannot launch text editors.');
+        break;
       default:
-        addLine('error', `Command not found: "${trimmed}". Type "help" for available commands.`);
+        // Attempt echo explicitly
+        if (trimmed.startsWith('echo ')) {
+          addLine('output', trimmed.substring(5));
+        } else {
+          addLine('error', `Command not found: "${trimmed}". Type "help" for available commands.`);
+        }
     }
   };
 

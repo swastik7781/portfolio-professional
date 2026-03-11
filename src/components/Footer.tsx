@@ -63,7 +63,7 @@ const Footer = () => {
             © {new Date().getFullYear()} Swastik Bhardwaj. All rights reserved.
           </p>
           <p className="font-mono-code text-[11px] text-muted-foreground">
-            Built with React + TypeScript + Tailwind
+            Designed & Engineered with Passion ✨
           </p>
         </div>
       </div>
