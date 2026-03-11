@@ -1,17 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { projects, type ProjectCategory } from '@/lib/portfolio-data';
+import Confetti from '@/components/Confetti';
 
 const categories: ProjectCategory[] = ["All", "Full Stack", "Machine Learning"];
 
 const Projects = () => {
   const [filter, setFilter] = useState<ProjectCategory>("All");
+  const [isBlackout, setIsBlackout] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    const handleTrigger = () => {
+      // Funny blackout & confetti
+      setIsBlackout(true);
+      toast("SYSTEM MALFUNCTION...", { "description": "Just kidding. You're already looking at it!" });
+      setTimeout(() => {
+        setIsBlackout(false);
+        setShowConfetti(true);
+        toast("Welcome to the Easter Egg!", { "description": "Since you're already here, enjoy some confetti." });
+        setTimeout(() => setShowConfetti(false), 5000);
+      }, 2000);
+    };
+    document.addEventListener('trigger-easter-egg', handleTrigger);
+    return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
+  }, []);
+
   const filtered = filter === "All" ? projects : projects.filter(p => p.category === filter);
 
   return (
     <section id="projects" className="py-24 px-4 sm:px-6 bg-background relative z-20">
+      <Confetti show={showConfetti} />
+      <AnimatePresence>
+        {isBlackout && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 bg-black z-[200] flex items-center justify-center flex-col gap-4"
+          >
+            <h1 className="text-destructive font-mono-code text-2xl animate-pulse tracking-widest uppercase">Fatal Reality Error</h1>
+            <p className="text-muted-foreground font-mono-code text-sm">Initiating fallback protocols...</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="max-w-7xl mx-auto">
 
         {/* Section header */}
@@ -77,13 +111,21 @@ const Projects = () => {
                       <span className="font-mono-code text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-md">
                         {project.category}
                       </span>
-                      {project.featured && (
-                        <Star size={11} className="text-amber-500 fill-amber-500" />
-                      )}
                     </div>
-                    <h3 className="font-display text-base font-semibold text-foreground group-hover:text-primary transition-colors duration-200 leading-snug">
+                    <a
+                      href={project.live !== "#" ? project.live : project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        if (project.title === "Portfolio Website") {
+                          e.preventDefault();
+                          document.dispatchEvent(new CustomEvent('trigger-easter-egg'));
+                        }
+                      }}
+                      className="font-display text-base font-semibold text-foreground hover:text-primary transition-colors duration-200 leading-snug cursor-pointer underline-offset-4 hover:underline"
+                    >
                       {project.title}
-                    </h3>
+                    </a>
                   </div>
 
                   {/* Links */}
@@ -105,9 +147,7 @@ const Projects = () => {
                         onClick={(e) => {
                           if (project.title === "Portfolio Website") {
                             e.preventDefault();
-                            toast("You're already here, brother/sister! 😎✨", {
-                              description: "Look around! Enjoy exploring the custom animations and design.",
-                            });
+                            document.dispatchEvent(new CustomEvent('trigger-easter-egg'));
                           }
                         }}
                         className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all duration-200"

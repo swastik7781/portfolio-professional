@@ -27,38 +27,14 @@ const COMMANDS: Record<string, string> = {
   clear: "Clear console output",
   easteregg: "???",
   exit: "Close the terminal",
-  pwd: "Print working directory",
-  ls: "List directory contents",
-  cd: "Change directory",
-  date: "Display current date and time",
-  echo: "Print arguments to the standard output",
-  sudo: "Execute a command as superuser",
-  ping: "Send ICMP ECHO_REQUEST to network hosts",
-  neofetch: "Display system information",
-  matrix: "Enter the matrix",
-  joke: "Tell a programming joke",
-  quote: "Get an inspirational quote",
-  history: "Show command history",
-  npm: "Node package manager",
-  git: "the stupid content tracker",
-  vim: "Vi IMproved, a programmer's text editor",
-  rm: "Remove files or directories",
-  cat: "Concatenate files and print on the standard output",
-  grep: "Print lines that match patterns",
-  kill: "Terminate a process",
-  top: "Display Linux processes",
-  curl: "Transfer a URL",
-  wget: "The non-interactive network downloader",
-  ssh: "OpenSSH remote login client",
-  docker: "A self-sufficient runtime for containers",
-  python: "Python interactive shell",
-  brew: "The Missing Package Manager for macOS",
-  apt: "command-line interface",
+  "download resume": "Download my latest resume",
+  certifications: "View my certifications",
+  eastereggs: "Discover the hidden easter eggs",
 };
 
 const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleProps) => {
   const [lines, setLines] = useState<ConsoleLine[]>([
-    { type: 'system', text: '🖥️  Swastik Bhardwaj Developer Console v1.0' },
+    { type: 'system', text: '[System] Swastik Bhardwaj Developer Console v1.0' },
     { type: 'system', text: 'Type "help" to see available commands.\n' },
   ]);
   const [input, setInput] = useState('');
@@ -136,11 +112,11 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
         break;
       case 'theme dark':
         onThemeChange('dark');
-        addLine('output', '🌙 Dark mode activated.');
+        addLine('output', '[Theme] Dark mode activated.');
         break;
       case 'theme light':
         onThemeChange('light');
-        addLine('output', '☀️ Light mode activated.');
+        addLine('output', '[Theme] Light mode activated.');
         break;
       case 'whoami':
         addLine('output', `\n${personalInfo.name} — ${personalInfo.title}\nVisitor to this terminal.\n`);
@@ -149,80 +125,32 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
         setLines([]);
         break;
       case 'easteregg':
-        addLine('output', '🎉 You found a secret! Launching surprise...');
+        addLine('output', '[Secret] You found a secret! Launching surprise...');
         onEasterEgg();
         break;
       case 'exit':
         onClose();
         break;
-      case 'pwd':
-        addLine('output', '/home/swastik/portfolio');
+      case 'download resume':
+        window.open(personalInfo.resumeUrl, '_blank');
+        addLine('output', '-> Downloading resume...');
         break;
-      case 'ls':
-        addLine('output', 'drwxr-xr-x 2 swastik swastik 4096 .github\ndrwxr-xr-x 3 swastik swastik 4096 public\ndrwxr-xr-x 4 swastik swastik 4096 src\n-rw-r--r-- 1 swastik swastik 1024 package.json\n-rw-r--r-- 1 swastik swastik 2341 README.md');
+      case 'certifications':
+        addLine('output', '\nCertifications:');
+        addLine('output', '  1. MERN Stack Development (CodeBeat, 2024)');
+        addLine('output', '  2. Spring Boot & Angular Training (Enterprise Program, 2025)');
+        addLine('output', '  3. Joy of Computing with Python (NPTEL, 2024 - 90%)');
+        addLine('output', '');
         break;
-      case 'date':
-        addLine('output', new Date().toString());
-        break;
-      case 'echo':
-        addLine('output', '(Provides echo functionality. Try typing something else!)');
-        break;
-      case 'sudo':
-        addLine('error', 'swastik is not in the sudoers file. This incident will be reported.');
-        break;
-      case 'ping':
-        addLine('output', 'PONG! Network is reachable (0.001ms latency).');
-        break;
-      case 'neofetch':
-        addLine('output', `\n    .-------------.\n   |  Portfolio  |  OS: Web Browser\n   '-------------'  Host: Swastik's Server\n        |   |       Kernel: React 18 / Vite\n        |   |       Uptime: 99.99%\n        |___|       Shell: TSX Console Component\n                    Theme: Swastik Custom\n                    Icons: Lucide React\n                    Terminal: DevConsole v1.0\n`);
-        break;
-      case 'matrix':
-        addLine('output', 'Wake up, Neo...\nThe matrix has you...\nFollow the white rabbit.');
-        onThemeChange('dark');
-        break;
-      case 'joke':
-        addLine('output', 'Why do programmers prefer dark mode?\nBecause light attracts bugs.');
-        break;
-      case 'quote':
-        addLine('output', `"${personalInfo.philosophy}"\n- Swastik Bhardwaj`);
-        break;
-      case 'history':
-        history.forEach((h, i) => addLine('output', `  ${i + 1}  ${h}`));
-        break;
-      case 'npm':
-      case 'docker':
-      case 'git':
-      case 'python':
-      case 'brew':
-      case 'apt':
-        addLine('output', `Usage: ${cmd} <command>\n\nThis is a simulation. The real ${cmd} is not available here.`);
-        break;
-      case 'rm':
-        addLine('error', 'rm: cannot remove: Permission denied (Nice try!)');
-        break;
-      case 'cd':
-        addLine('output', 'Directory changed. Path tracked.');
-        break;
-      case 'cat':
-      case 'grep':
-      case 'kill':
-      case 'top':
-      case 'curl':
-      case 'wget':
-      case 'ssh':
-        addLine('output', `${cmd}: command simulated successfully.`);
-        break;
-      case 'vim':
-      case 'emacs':
-        addLine('output', 'Error: Browser lacks raw terminal capabilities. Cannot launch text editors.');
+      case 'eastereggs':
+        addLine('output', '\nHidden Easter Eggs:');
+        addLine('output', '  - Click on "Portfolio Website" in Projects');
+        addLine('output', '  - Type "easteregg" in this console');
+        addLine('output', '  - ??? There might be more.');
+        addLine('output', '');
         break;
       default:
-        // Attempt echo explicitly
-        if (trimmed.startsWith('echo ')) {
-          addLine('output', trimmed.substring(5));
-        } else {
-          addLine('error', `Command not found: "${trimmed}". Type "help" for available commands.`);
-        }
+        addLine('error', `Command not found: "${trimmed}". Type "help" for available commands.`);
     }
   };
 

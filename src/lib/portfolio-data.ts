@@ -101,7 +101,7 @@ export const projects = [
   {
     title: "CR Election System",
     description: "Full-stack voting platform with real-time result tracking, secure authentication, and a live vote-counting dashboard for class representative elections.",
-    tech: ["React", "Node.js", "Express.js", "MongoDB"],
+    tech: ["HTML", "CSS", "Java Servlet (JSP)", "Apache Tomcat"],
     category: "Full Stack" as ProjectCategory,
     github: "https://github.com/swastik7781/cr_election.git",
     live: "https://cr-election-xsfa.vercel.app/",
@@ -127,8 +127,8 @@ export const projects = [
   },
   {
     title: "Dynamic Retail Demand Forecasting",
-    description: "We developed an advanced machine learning system that predicts weekly retail sales with unprecedented accuracy while identifying the holidays that significantly influence consumer purchasing patterns. Our dual approach combines supervised regression for precise sales prediction and classification algorithms for holiday impact analysis. The result is an end-to-end pipeline featuring comprehensive data cleaning, sophisticated feature engineering, and 15 state-of-the-art ML algorithms working in concert.\n\nKey Achievements:\n- Achieved an R² Score of 0.91 using Random Forest Regression.\n- Successfully classified holiday weeks with 86% Accuracy using Decision Trees.\n- Deployed a fully interactive, futuristic web interface for real-time predictions.",
-    tech: ["Python", "TensorFlow", "LSTM", "Pandas"],
+    description: "Advanced machine learning pipeline using Random Forest and Decision Trees to predict retail sales and classify holiday impacts with 91% R² and 86% accuracy.",
+    tech: ["Python", "NumPy", "Pandas", "Seaborn", "Matplotlib"],
     category: "Machine Learning" as ProjectCategory,
     github: "https://github.com/Dynamic-Retail-Demand-Forecasting-ML/Dynamic-Retail-Demand-Forecasting.git",
     live: "https://bigdaddyproject.vercel.app",
@@ -191,20 +191,6 @@ export const timelineItems = [
 
 export const experiences = [
   {
-    role: "Spring Boot & Angular Training",
-    company: "Enterprise Development",
-    date: "Jun – Jul 2025",
-    description: "Intensive enterprise Java development training with Spring Boot and Angular. Built full-stack enterprise applications with layered architecture, dependency injection, and reactive frontend patterns.",
-    tech: ["Spring Boot", "Angular", "Java", "TypeScript"],
-  },
-  {
-    role: "MERN Stack Developer Intern",
-    company: "CodeBeat",
-    date: "Jun – Jul 2024",
-    description: "Built production features using the MERN stack. Developed RESTful APIs, implemented JWT authentication systems, and collaborated with senior developers on client-facing projects.",
-    tech: ["MongoDB", "Express.js", "React", "Node.js"],
-  },
-  {
     role: "AI Powered AR/VR aided Computer Vision Builder",
     company: "IIT Delhi Program",
     date: "Jan 13, 2026 – Apr 20, 2026",
@@ -218,9 +204,32 @@ export const experiences = [
     description: "Led full-stack development of a Campus Management ERP as the major academic project. Handled architecture design, database modeling, API development, and deployment.",
     tech: ["React", "Node.js", "MongoDB", "Express.js"],
   },
+  {
+    role: "Spring Boot & Angular Training",
+    company: "Enterprise Development",
+    date: "Jun – Jul 2025",
+    description: "Intensive enterprise Java development training with Spring Boot and Angular. Built full-stack enterprise applications with layered architecture, dependency injection, and reactive frontend patterns.",
+    tech: ["Spring Boot", "Angular", "Java", "TypeScript"],
+  },
+  {
+    role: "MERN Stack Developer Intern",
+    company: "CodeBeat",
+    date: "Jun – Jul 2024",
+    description: "Built production features using the MERN stack. Developed RESTful APIs, implemented JWT authentication systems, and collaborated with senior developers on client-facing projects.",
+    tech: ["MongoDB", "Express.js", "React", "Node.js"],
+  },
 ];
 
 export const testimonials = [
+  {
+    name: "Auroshikha Tripathy",
+    role: "Ex-Senior Developer at Owision",
+    company: "",
+    quote: "Swastik has an incredible ability to break down complex problems into clean, elegant solutions. His dedication to writing maintainable code and his eye for design make him stand out as a developer.",
+    rating: 5,
+    photo: "/photos/auroshikha.png",
+    portfolio: "https://auroshikhatripathyportfolio.vercel.app/",
+  },
   {
     name: "T. Sribatsa Patro",
     role: "Ex Developer at Rumango pvt ltd",
@@ -237,15 +246,6 @@ export const testimonials = [
     quote: "Working with Swastik was a great experience. He brings both technical depth and a collaborative mindset to every project. His code quality and attention to detail consistently exceeded expectations.",
     rating: 5,
     photo: "/photos/abhijeet.jpg",
-  },
-  {
-    name: "Auroshikha Tripathy",
-    role: "Ex-Senior Developer at Owision",
-    company: "",
-    quote: "Swastik has an incredible ability to break down complex problems into clean, elegant solutions. His dedication to writing maintainable code and his eye for design make him stand out as a developer.",
-    rating: 5,
-    photo: "/photos/auroshikha.png",
-    portfolio: "https://auroshikhatripathyportfolio.vercel.app/",
   },
   {
     name: "Khushi Tiwari",
