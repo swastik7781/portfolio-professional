@@ -174,18 +174,18 @@ export const timelineItems = [
     description: "Intensive enterprise Java training — layered architecture, dependency injection, and reactive Angular frontends.",
   },
   {
-    type: "work",
-    date: "Jan 13, 2026 – Apr 20, 2026",
-    title: "AI Powered AR/VR aided Computer Vision Builder",
-    subtitle: "IIT Delhi Program",
-    description: "Enrolled in an advanced course focused on building AI-powered AR/VR applications with computer vision integration, exploring cutting-edge technologies in augmented and virtual environments.",
-  },
-  {
     type: "project",
     date: "2025",
     title: "Major Project — Campus ERP",
     subtitle: "Academic (B.Tech CSE)",
     description: "Led full-stack development of a Campus Management ERP as the major academic project. Handled architecture design, database modeling, API development, and deployment.",
+  },
+  {
+    type: "work",
+    date: "Jan 13, 2026 – Apr 20, 2026",
+    title: "AI Powered AR/VR aided Computer Vision Builder",
+    subtitle: "IIT Delhi Program",
+    description: "Enrolled in an advanced course focused on building AI-powered AR/VR applications with computer vision integration, exploring cutting-edge technologies in augmented and virtual environments.",
   },
 ];
 
