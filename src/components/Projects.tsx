@@ -12,17 +12,18 @@ const Projects = () => {
   const [isBlackout, setIsBlackout] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  const handleBlackoutClick = () => {
+    setIsBlackout(false);
+    setShowConfetti(true);
+    toast("Well, you're already here...", { "description": "Might as well enjoy some confetti while you stay." });
+    setTimeout(() => setShowConfetti(false), 5000);
+  };
+
   useEffect(() => {
     const handleTrigger = () => {
       // Funny blackout & confetti
       setIsBlackout(true);
       toast("SYSTEM MALFUNCTION...", { "description": "Just kidding. You're already looking at it!" });
-      setTimeout(() => {
-        setIsBlackout(false);
-        setShowConfetti(true);
-        toast("Well, you're already here...", { "description": "Might as well enjoy some confetti while you stay." });
-        setTimeout(() => setShowConfetti(false), 5000);
-      }, 2000);
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
@@ -39,10 +40,12 @@ const Projects = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 bg-black z-[200] flex items-center justify-center flex-col gap-4"
+            className="fixed inset-0 bg-black z-[200] flex items-center justify-center flex-col gap-4 cursor-pointer"
+            onClick={handleBlackoutClick}
           >
-            <h1 className="text-destructive font-mono-code text-2xl animate-pulse tracking-widest uppercase">Fatal Reality Error</h1>
-            <p className="text-muted-foreground font-mono-code text-sm">Initiating fallback protocols...</p>
+            <h1 className="text-destructive font-mono-code text-2xl animate-pulse tracking-widest uppercase text-center px-4">Fatal Reality Error</h1>
+            <p className="text-muted-foreground font-mono-code text-sm animate-pulse">Initiating fallback protocols...</p>
+            <p className="text-muted-foreground font-mono-code text-xs mt-8 opacity-70">(Click anywhere to bypass system failure)</p>
           </motion.div>
         )}
       </AnimatePresence>
