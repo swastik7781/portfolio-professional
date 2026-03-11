@@ -20,7 +20,7 @@ const Projects = () => {
       setTimeout(() => {
         setIsBlackout(false);
         setShowConfetti(true);
-        toast("Welcome to the Easter Egg!", { "description": "Since you're already here, enjoy some confetti." });
+        toast("Well, you're already here...", { "description": "Might as well enjoy some confetti while you stay." });
         setTimeout(() => setShowConfetti(false), 5000);
       }, 2000);
     };
