@@ -14,7 +14,22 @@ const Projects = () => {
   const [isResolving, setIsResolving] = useState(false);
   const [resolveProgress, setResolveProgress] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
+  const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string}[]>([]);
+  const [typedTitle, setTypedTitle] = useState("");
+  const fullTitle = "FATAL REALITY ERROR";
+
+  useEffect(() => {
+    if (isBlackout && !isResolving) {
+      setTypedTitle("");
+      let i = 0;
+      const typeInterval = setInterval(() => {
+        setTypedTitle(fullTitle.substring(0, i + 1));
+        i++;
+        if (i >= fullTitle.length) clearInterval(typeInterval);
+      }, 100);
+      return () => clearInterval(typeInterval);
+    }
+  }, [isBlackout, isResolving]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -25,19 +40,27 @@ const Projects = () => {
         "KERNEL_PANIC", "REBOOT_REQUIRED", "DATA_CORRUPTION_IMMINENT",
         "UNAUTHORIZED_ACCESS", "SYSTEM_COMPROMISED", "DECRYPTING_STORE..."
       ];
-      let index = 0;
       interval = setInterval(() => {
-        setTerminalLogs(prev => {
-          const newLogs = [...prev, `> ${msgs[index % msgs.length]}`];
-          return newLogs.length > 8 ? newLogs.slice(newLogs.length - 8) : newLogs;
-        });
-        index++;
-      }, 400);
+        // Calculate a safe zone for logs avoiding the center (e.g. 30% to 70%)
+        let rTop = Math.random() * 95;
+        let rLeft = Math.random() * 95;
+        if (rTop > 25 && rTop < 75 && rLeft > 20 && rLeft < 80) {
+          if (Math.random() > 0.5) rTop = Math.random() * 25; // force top
+          else rTop = 75 + Math.random() * 20; // force bottom
+        }
+        
+        setErrorLogs(prev => [...prev.slice(-30), {
+          id: Date.now(),
+          text: msgs[Math.floor(Math.random() * msgs.length)],
+          top: `${rTop}%`,
+          left: `${rLeft}%`
+        }]);
+      }, 150);
     } else if (isResolving) {
       setResolveProgress(0);
-      const totalInitialLogs = terminalLogs.length || 1;
+      const totalInitialLogs = errorLogs.length;
       interval = setInterval(() => {
-        setTerminalLogs(prev => {
+        setErrorLogs(prev => {
           if (prev.length <= 1) {
             setResolveProgress(100);
             clearInterval(interval);
@@ -54,9 +77,9 @@ const Projects = () => {
           setResolveProgress(Math.floor(removedRatio * 100));
           return prev.slice(1);
         });
-      }, 100);
+      }, 50);
     } else {
-      setTerminalLogs([]);
+      setErrorLogs([]);
     }
     return () => clearInterval(interval);
   }, [isBlackout, isResolving]);
@@ -70,7 +93,7 @@ const Projects = () => {
     const handleTrigger = () => {
       setIsBlackout(true);
       setIsResolving(false);
-      setTerminalLogs([]);
+      setErrorLogs([]);
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
@@ -92,55 +115,47 @@ const Projects = () => {
               className="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
               onClick={handleBlackoutClick}
             >
+              {errorLogs.map(log => (
+                <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500/80" style={{ top: log.top, left: log.left }}>
+                  {log.text}
+                </div>
+              ))}
               <div 
-                className="relative z-10 flex flex-col p-8 bg-black border-2 border-red-500/40 max-w-lg w-full mx-4 rounded-none"
+                className="relative z-10 flex flex-col items-center p-8 bg-black border-2 border-red-500/40 max-w-md w-full mx-4 rounded-none"
                 onClick={(e) => {
                   e.stopPropagation(); // keep inner clicks from re-triggering if already handling
                   if (!isResolving) setIsResolving(true);
                 }}
               >
-                <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold tracking-widest uppercase mb-6 border-b border-red-500/30 pb-4">
-                  {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
-                </h1>
-                
-                <div className="flex-1 w-full min-h-[200px] flex flex-col justify-end overflow-hidden mb-6">
-                  {terminalLogs.map((log, i) => (
-                    <motion.div 
-                      key={i} 
-                      initial={{ opacity: 0, x: -10 }} 
-                      animate={{ opacity: 1, x: 0 }} 
-                      className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap text-red-500/80 mb-1"
-                    >
-                      {log}
-                    </motion.div>
-                  ))}
-                  {(!isResolving && terminalLogs.length > 0) && (
-                    <motion.div 
-                      animate={{ opacity: [1, 0] }} 
-                      transition={{ repeat: Infinity, duration: 0.8 }} 
-                      className="w-3 h-5 bg-red-500/80 mt-1"
-                    />
+                <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold tracking-widest uppercase text-center min-h-[40px]">
+                  {isResolving ? "Resolving Errors..." : (
+                    <>
+                      {typedTitle}
+                      <motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} className="inline-block w-4 h-6 bg-red-500 ml-1 translate-y-1"></motion.span>
+                    </>
                   )}
-                </div>
-
+                </h1>
                 {isResolving ? (
-                  <div className="relative w-16 h-16 flex items-center justify-center self-center">
+                  <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
                     <svg className="absolute inset-0 w-full h-full -rotate-90">
-                      <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950/50" />
+                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950/50" />
                       <motion.circle 
-                        cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="none" 
+                        cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
                         className="text-red-500"
-                        strokeDasharray="175.9"
-                        strokeDashoffset={175.9 - (175.9 * resolveProgress) / 100}
+                        strokeDasharray="251.2"
+                        strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
                         transition={{ duration: 0.1 }}
                       />
                     </svg>
-                    <span className="font-mono-code text-red-500 font-bold text-xs">{resolveProgress}%</span>
+                    <span className="font-mono-code text-red-500 font-bold">{resolveProgress}%</span>
                   </div>
                 ) : (
-                  <p className="text-red-500/70 font-mono-code text-xs opacity-90 border border-red-500/30 px-4 py-3 bg-red-500/5 transition-colors cursor-pointer text-center rounded-none mt-auto">
-                    [ CLICK ANYWHERE TO INITIALIZE SYSTEM PURGE ]
-                  </p>
+                  <>
+                    <p className="text-red-500/80 font-mono-code text-sm mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
+                    <p className="text-red-500/70 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 bg-red-500/5 transition-colors cursor-pointer text-center rounded-none">
+                      [ CLICK ANYWHERE TO INITIALIZE SYSTEM PURGE ]
+                    </p>
+                  </>
                 )}
               </div>
             </motion.div>
