@@ -44,8 +44,9 @@ const Testimonials = () => {
         {/* Testimonial slider */}
         <div className="overflow-hidden w-full relative">
           <motion.div
+            initial={false}
             animate={{ x: `-${current * 100}%` }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.6 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}

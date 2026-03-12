@@ -79,7 +79,6 @@ const Projects = () => {
       setIsBlackout(true);
       setIsResolving(false);
       setErrorLogs([]);
-      toast("SYSTEM MALFUNCTION...", { "description": "Just kidding. You're already looking at it!" });
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
@@ -106,7 +105,13 @@ const Projects = () => {
                   {log.text}
                 </div>
               ))}
-              <div className="relative z-10 flex flex-col items-center p-8 bg-background/80 backdrop-blur-md rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.15)]">
+              <div 
+                className="relative z-10 flex flex-col items-center p-8 bg-background/80 backdrop-blur-md rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.15)]"
+                onClick={(e) => {
+                  e.stopPropagation(); // keep inner clicks from re-triggering if already handling
+                  if (!isResolving) setIsResolving(true);
+                }}
+              >
                 <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
                   {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
                 </h1>
@@ -116,7 +121,7 @@ const Projects = () => {
                       <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950" />
                       <motion.circle 
                         cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
-                        className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]"
+                        className="text-red-500"
                         strokeDasharray="251.2"
                         strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
                         transition={{ duration: 0.1 }}
@@ -128,7 +133,7 @@ const Projects = () => {
                   <>
                     <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
                     <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer text-center">
-                      [ CLICK TO INITIALIZE SYSTEM PURGE ]
+                      [ CLICK ANYWHERE TO INITIALIZE SYSTEM PURGE ]
                     </p>
                   </>
                 )}
