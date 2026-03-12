@@ -11,6 +11,7 @@ const Projects = () => {
   const [filter, setFilter] = useState<ProjectCategory>("All");
   const [isBlackout, setIsBlackout] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
+  const [resolveProgress, setResolveProgress] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string}[]>([]);
 
@@ -24,17 +25,28 @@ const Projects = () => {
         "UNAUTHORIZED_ACCESS", "SYSTEM_COMPROMISED", "DECRYPTING_STORE..."
       ];
       interval = setInterval(() => {
+        // Calculate a safe zone for logs avoiding the center (e.g. 30% to 70%)
+        let rTop = Math.random() * 95;
+        let rLeft = Math.random() * 95;
+        if (rTop > 25 && rTop < 75 && rLeft > 20 && rLeft < 80) {
+          if (Math.random() > 0.5) rTop = Math.random() * 25; // force top
+          else rTop = 75 + Math.random() * 20; // force bottom
+        }
+        
         setErrorLogs(prev => [...prev.slice(-30), {
           id: Date.now(),
           text: msgs[Math.floor(Math.random() * msgs.length)],
-          top: `${Math.floor(Math.random() * 95)}%`,
-          left: `${Math.floor(Math.random() * 95)}%`
+          top: `${rTop}%`,
+          left: `${rLeft}%`
         }]);
       }, 150);
     } else if (isResolving) {
+      setResolveProgress(0);
+      const totalInitialLogs = errorLogs.length;
       interval = setInterval(() => {
         setErrorLogs(prev => {
           if (prev.length <= 1) {
+            setResolveProgress(100);
             clearInterval(interval);
             setTimeout(() => {
               setIsBlackout(false);
@@ -45,6 +57,8 @@ const Projects = () => {
             }, 600);
             return [];
           }
+          const removedRatio = (totalInitialLogs - (prev.length - 1)) / totalInitialLogs;
+          setResolveProgress(Math.floor(removedRatio * 100));
           return prev.slice(1);
         });
       }, 50);
@@ -91,14 +105,28 @@ const Projects = () => {
                 {log.text}
               </div>
             ))}
-            <div className="relative z-10 flex flex-col items-center p-8 bg-black/40 backdrop-blur-sm rounded-2xl border border-red-500/20">
-              <h1 className="text-red-500 font-mono-code text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
+            <div className="relative z-10 flex flex-col items-center p-8 bg-black/40 backdrop-blur-sm rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-2xl">
+              <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
                 {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
               </h1>
-              {!isResolving && (
+              {isResolving ? (
+                <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
+                  <svg className="absolute inset-0 w-full h-full -rotate-90">
+                    <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950" />
+                    <motion.circle 
+                      cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
+                      className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]"
+                      strokeDasharray="251.2"
+                      strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
+                      transition={{ duration: 0.1 }}
+                    />
+                  </svg>
+                  <span className="font-mono-code text-red-500 font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
+                </div>
+              ) : (
                 <>
-                  <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4">CRITICAL: Mainframe override triggered.</p>
-                  <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors">
+                  <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
+                  <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer text-center">
                     [ CLICK TO INITIALIZE SYSTEM PURGE ]
                   </p>
                 </>
