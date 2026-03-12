@@ -65,6 +65,7 @@ const Projects = () => {
               setIsResolving(false);
               setDarkness(0);
               document.body.style.overflow = 'auto';
+              document.body.classList.remove('is-glitch-shaking'); // Remove shake on resolve
               if (isFromTerminal) {
                 document.dispatchEvent(new CustomEvent('terminal-easter-egg-resolved'));
               } else {
@@ -91,6 +92,7 @@ const Projects = () => {
       setErrorLogs([]);
       setDarkness(0);
       document.body.style.overflow = 'auto';
+      document.body.classList.remove('is-glitch-shaking'); // Failsafe
     }
     
     return () => {
@@ -110,7 +112,7 @@ const Projects = () => {
       setIsFromTerminal(e.detail?.fromTerminal || false);
       setIsFreezing(true);
       setIsBlackout(false);
-      document.body.classList.add('animate-glitch-shake');
+      document.body.classList.add('is-glitch-shaking');
       
       freezeTimer = setTimeout(() => {
         setIsFreezing(false);
@@ -119,13 +121,13 @@ const Projects = () => {
         setResolveProgress(0);
         setErrorLogs([]);
         setDarkness(0);
-        document.body.classList.remove('animate-glitch-shake');
+        // We DO NOT remove animate-glitch-shake here, let it persist during errors
       }, 1500);
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => {
       document.removeEventListener('trigger-easter-egg', handleTrigger);
-      document.body.classList.remove('animate-glitch-shake');
+      document.body.classList.remove('is-glitch-shaking'); // Cleanup on unmount
       clearTimeout(freezeTimer);
     };
   }, []);
@@ -141,7 +143,7 @@ const Projects = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[9999] pointer-events-auto cursor-none select-none flex flex-col justify-between"
+              className="glitch-target fixed inset-0 z-[9999] pointer-events-auto cursor-none select-none flex flex-col justify-between"
             >
               <div className="absolute inset-0 bg-primary/5 animate-[pulse_0.15s_ease-in-out_infinite] mix-blend-overlay"></div>
             </motion.div>
@@ -153,7 +155,7 @@ const Projects = () => {
               animate={{ opacity: 1 }} 
               exit={isResolving && resolveProgress === 100 ? { y: "150vh", rotate: 15, opacity: 0 } : { opacity: 0 }} 
               transition={{ duration: isResolving && resolveProgress === 100 ? 1 : 0.2, ease: "easeIn" }}
-              className="fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden cursor-pointer"
+              className="glitch-target fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden cursor-pointer"
               style={{ backgroundColor: `rgba(0, 0, 0, ${darkness})` }}
               onClick={handleBlackoutClick}
             >

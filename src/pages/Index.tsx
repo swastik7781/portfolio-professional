@@ -126,7 +126,7 @@ const Index = () => {
         activeSection={activeSection}
       />
 
-      <main>
+      <main className="glitch-target">
         <Hero
           onOpenConsole={() => setConsoleOpen(true)}
           onLogoClick={handleLogoClick}
@@ -141,7 +141,9 @@ const Index = () => {
         <Contact visitorName={visitorName} />
       </main>
 
-      <Footer />
+      <div className="glitch-target">
+        <Footer />
+      </div>
 
       {/* Dev Console */}
       <DevConsole

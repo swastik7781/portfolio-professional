@@ -40,7 +40,7 @@ const Navbar = ({ theme, toggleTheme, onOpenConsole, onOpenPalette, activeSectio
   return (
     <>
       {/* Scroll progress bar */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-transparent pointer-events-none">
+      <div className="glitch-target fixed top-0 left-0 right-0 z-[60] h-0.5 bg-transparent pointer-events-none">
         <div
           className="h-full bg-primary transition-none"
           style={{ width: `${progress}%` }}
@@ -51,7 +51,7 @@ const Navbar = ({ theme, toggleTheme, onOpenConsole, onOpenPalette, activeSectio
         initial={{ y: -64 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0.5 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+        className={`glitch-target fixed top-0.5 left-0 right-0 z-50 transition-all duration-300 ${scrolled
           ? 'bg-background/90 backdrop-blur-xl border-b border-border'
           : 'bg-transparent'
           }`}
