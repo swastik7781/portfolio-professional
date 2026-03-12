@@ -18,9 +18,17 @@ const Testimonials = () => {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const { clientWidth } = scrollContainerRef.current;
-      const scrollAmount = direction === 'left' ? -clientWidth : clientWidth;
-      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      // Find the first card to get the exact scroll distance needed (1 card width + gap)
+      const firstCard = scrollContainerRef.current.querySelector('.snap-center') as HTMLElement;
+      if (firstCard) {
+        const scrollAmount = direction === 'left' ? -firstCard.offsetWidth : firstCard.offsetWidth;
+        scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      } else {
+        // Fallback
+        const { clientWidth } = scrollContainerRef.current;
+        const scrollAmount = direction === 'left' ? -(clientWidth / 1.5) : (clientWidth / 1.5);
+        scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
     }
   };
 
@@ -48,14 +56,14 @@ const Testimonials = () => {
           <div 
             ref={scrollContainerRef}
             onScroll={checkScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pb-8 pt-4 px-2"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 sm:gap-6 pb-8 pt-4 px-4 sm:px-2 cursor-grab active:cursor-grabbing touch-pan-x"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
           >
             {testimonials.map((t, idx) => (
-              <div key={idx} className="w-full sm:w-[80%] md:w-[60%] shrink-0 snap-center">
-                <div className="card-base p-8 text-center h-full flex flex-col justify-between transition-all duration-300 hover:shadow-card-hover">
+              <div key={idx} className="w-[85vw] sm:w-[500px] shrink-0 snap-center">
+                <div className="card-base p-6 sm:p-8 text-center h-full flex flex-col justify-between transition-all duration-300 hover:shadow-card-hover border-primary/10">
                   <div>
-                    <Quote className="mx-auto text-primary/20 mb-6" size={36} />
+                    <Quote className="mx-auto text-primary/20 mb-4 sm:mb-6" size={32} />
                     <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic max-w-xl mx-auto">
                       "{t.quote}"
                     </p>

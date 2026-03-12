@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, AlertTriangle, XCircle, Terminal } from 'lucide-react';
+import { ExternalLink, Github, Terminal, Cpu, Bug, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { projects, type ProjectCategory } from '@/lib/portfolio-data';
 
@@ -23,7 +23,7 @@ const Projects = () => {
       document.body.style.overflow = 'hidden';
       
       const msgs = [
-        "0xERR_SYS_FAIL", "OVERRIDE_PROTOCOL_INIT", "MEMORY_LEAK_DETECTED",
+        "0xERR_ENV_MISMATCH", "OVERRIDE_PROTOCOL_INIT", "MEMORY_LEAK_DETECTED",
         "BYPASSING_SECURITY_MAINFRAME", "FATAL_EXCEPTION_0x00000008",
         "KERNEL_PANIC", "REBOOT_REQUIRED", "DATA_CORRUPTION_IMMINENT",
         "UNAUTHORIZED_ACCESS", "SYSTEM_COMPROMISED", "DECRYPTING_STORE..."
@@ -63,16 +63,16 @@ const Projects = () => {
               setIsResolving(false);
               setDarkness(0);
               document.body.style.overflow = 'auto';
-              toast.error("Error Code: 404", { description: "You are already here on my portfolio lol. System nominal." });
-            }, 600);
+              toast.success("Error Code: 404", { description: "You are already here on my portfolio lol. System nominal." });
+            }, 1200); // Wait bit longer on 100% to show completion
             return [];
           }
           const removedRatio = (totalInitialLogs - (prev.length - 1)) / (totalInitialLogs || 1);
           setResolveProgress(Math.floor(removedRatio * 100));
-          return prev.slice(3); // remove faster
+          return prev.slice(4); // remove super fast
         });
         setDarkness(prev => Math.max(prev - 0.1, 0));
-      }, 40);
+      }, 30);
     } else {
       setErrorLogs([]);
       setDarkness(0);
@@ -111,42 +111,42 @@ const Projects = () => {
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }} 
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden"
+              exit={isResolving && resolveProgress === 100 ? { scale: 0, opacity: 0, borderRadius: "100%" } : { opacity: 0 }} 
+              transition={{ duration: isResolving && resolveProgress === 100 ? 0.5 : 0.2, ease: "easeInOut" }}
+              className="fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden cursor-pointer"
               style={{ backgroundColor: `rgba(0, 0, 0, ${darkness})` }}
+              onClick={handleBlackoutClick}
             >
-              <div className="absolute inset-0 cursor-crosshair z-0" onClick={handleBlackoutClick} />
               
               {/* Vigorously spawning errors */}
               {errorLogs.map(log => {
                 let content;
                 if (log.type === 'window') {
                   content = (
-                    <div className="bg-background border-2 border-destructive/80 p-3 rounded-md shadow-2xl flex flex-col gap-2 min-w-[200px] pointer-events-none">
-                       <div className="flex items-center gap-2 border-b border-border pb-2 bg-destructive/10 -m-3 mb-2 p-2">
-                         <XCircle className="text-destructive h-4 w-4" />
-                         <span className="text-xs font-bold font-mono">System.Alert</span>
+                    <div className="bg-background border border-primary/40 p-3 rounded-md shadow-2xl flex flex-col gap-2 min-w-[200px] pointer-events-none opacity-90">
+                       <div className="flex items-center gap-2 border-b border-border pb-2 bg-primary/10 -m-3 mb-2 p-2">
+                         <X className="text-primary h-4 w-4" />
+                         <span className="text-xs font-bold font-mono text-primary">System.Alert</span>
                        </div>
                        <div className="flex items-center gap-3">
-                         <AlertTriangle className="text-destructive animate-pulse h-8 w-8" />
-                         <span className="font-mono-code text-sm font-bold">{log.text}</span>
+                         <Bug className="text-primary animate-pulse h-8 w-8" />
+                         <span className="font-mono-code text-sm font-bold text-foreground">{log.text}</span>
                        </div>
                     </div>
                   );
                 } else if (log.type === 'box') {
                   content = (
-                    <div className="bg-destructive text-destructive-foreground font-mono-code text-sm font-bold p-2 border-2 border-black whitespace-nowrap pointer-events-none drop-shadow-lg">
+                    <div className="bg-primary text-primary-foreground font-mono-code text-sm font-bold p-2 border border-black whitespace-nowrap pointer-events-none drop-shadow-lg opacity-80">
                       [ERROR] {log.text}
                     </div>
                   );
                 } else if (log.type === 'block') {
                   content = (
-                     <div className="bg-black/90 border border-destructive/30 backdrop-blur-md pointer-events-none" style={{ width: log.width, height: log.height }} />
+                     <div className="bg-foreground border border-primary/30 backdrop-blur-md pointer-events-none opacity-30" style={{ width: log.width, height: log.height }} />
                   );
                 } else {
                   content = (
-                    <div className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                    <div className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]">
                       {log.text}
                     </div>
                   );
@@ -161,50 +161,48 @@ const Projects = () => {
               
               {/* Central Box */}
               <div 
-                className="relative z-50 flex flex-col items-center p-8 bg-background/90 backdrop-blur-xl rounded-2xl border-2 border-destructive max-w-lg w-full mx-4 shadow-[0_0_80px_rgba(239,68,68,0.4)]"
+                className={`relative z-50 flex flex-col items-center p-6 sm:p-8 bg-background/95 backdrop-blur-xl rounded-2xl border-2 border-primary w-[90vw] sm:w-[85vw] max-w-lg shadow-[0_0_80px_hsl(var(--primary)/0.3)] transition-all duration-300 ${resolveProgress === 100 ? 'border-green-500 shadow-[0_0_80px_rgba(34,197,94,0.4)]' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation(); 
                   if (!isResolving) setIsResolving(true);
                 }}
               >
-                <div className="absolute -top-12 animate-bounce">
-                  <AlertTriangle className="text-destructive drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-background rounded-full p-2" size={80} />
+                <div className="absolute -top-10 bg-background border-2 border-primary rounded-lg p-3 rotate-3">
+                  <Cpu className="text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.5)] bg-background" size={40} />
                 </div>
                 
-                <h1 className="text-destructive font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center mt-6">
-                  {isResolving ? "PURGING SYSTEM..." : "SYSTEM CRASH DETECTED"}
+                <h1 className={`font-mono-code text-xl sm:text-2xl font-bold tracking-widest uppercase text-center mt-6 ${resolveProgress === 100 ? 'text-green-500' : 'text-primary animate-pulse'}`}>
+                  {resolveProgress === 100 ? "SYSTEM NOMINAL" : (isResolving ? "RESTORING PROTOCOLS..." : "SYSTEM CRASH DETECTED")}
                 </h1>
                 
                 {isResolving ? (
-                  <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
-                    <svg className="absolute inset-0 w-full h-full -rotate-90">
-                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-destructive/20" />
-                      <motion.circle 
-                        cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
-                        className="text-destructive"
-                        strokeDasharray="251.2"
-                        strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
-                        transition={{ duration: 0.1 }}
-                      />
-                    </svg>
-                    <span className="font-mono-code text-destructive font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
+                  <div className="mt-8 relative w-full max-w-xs h-6 bg-secondary rounded-full overflow-hidden border border-border">
+                    <motion.div 
+                      className={`absolute top-0 left-0 bottom-0 ${resolveProgress === 100 ? 'bg-green-500' : 'bg-primary'}`}
+                      initial={{ width: "0%" }}
+                      animate={{ width: `${resolveProgress}%` }}
+                      transition={{ duration: 0.1 }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center font-mono-code text-xs font-bold text-white mix-blend-difference">
+                      {resolveProgress}%
+                    </div>
                   </div>
                 ) : (
                   <>
-                    <div className="w-full bg-destructive/10 border border-destructive/30 p-4 rounded-lg mt-6 mb-8 text-left">
-                       <div className="flex items-center gap-2 mb-2 text-destructive">
+                    <div className="w-full bg-primary/5 border border-primary/20 p-3 sm:p-4 rounded-lg mt-6 mb-6 sm:mb-8 text-left">
+                       <div className="flex items-center gap-2 mb-2 text-primary">
                          <Terminal size={16} />
-                         <span className="font-mono text-sm font-semibold">Kernel Error Log</span>
+                         <span className="font-mono text-sm font-semibold text-primary">Runtime Error Log</span>
                        </div>
                        <p className="font-mono text-xs text-muted-foreground opacity-80 h-16 overflow-hidden leading-relaxed">
-                         [FATAL] Multiple sector failures detected.<br/>
-                         [WARN] UI Thread disconnected.<br/>
-                         [CRIT] Reality anchors failing...<br/>
-                         Please initiate manual override.
+                         [FATAL] Recursive loop anomaly.<br/>
+                         [WARN] Client accessing internal origin.<br/>
+                         [CRIT] Paradox detected: Portfolio in Portfolio.<br/>
+                         Awaiting user manual override to restore.
                        </p>
                     </div>
-                    <button className="text-foreground font-mono-code text-[11px] sm:text-xs md:text-sm font-semibold border-2 border-destructive px-4 py-3 rounded-lg bg-destructive hover:bg-destructive/80 transition-all cursor-pointer text-center animate-pulse w-full shadow-[0_0_20px_rgba(239,68,68,0.3)]">
-                      CLICK ANYWHERE ON SCREEN TO FIX / PURGE SYSTEM
+                    <button className="text-primary-foreground font-mono-code text-[10px] sm:text-xs md:text-sm font-semibold border-2 border-primary px-3 sm:px-4 py-3 rounded-lg bg-primary hover:bg-primary/90 transition-all cursor-pointer text-center animate-pulse w-full shadow-[0_0_20px_hsl(var(--primary)/0.3)]">
+                      CLICK ANYWHERE ON SCREEN TO RESTORE
                     </button>
                   </>
                 )}
