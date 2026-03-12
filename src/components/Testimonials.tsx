@@ -31,6 +31,11 @@ const Testimonials = () => {
     setTouchStart(null);
   };
 
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
   return (
     <section className="py-24 px-4 sm:px-6 bg-secondary/20 relative z-10">
       <div className="max-w-4xl mx-auto">
@@ -59,11 +64,22 @@ const Testimonials = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x);
+                if (swipe < -swipeConfidenceThreshold) {
+                  next();
+                } else if (swipe > swipeConfidenceThreshold) {
+                  prev();
+                }
+              }}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="w-full sm:w-[85%] md:w-[75%] absolute"
+              className="w-full sm:w-[85%] md:w-[75%] cursor-grab active:cursor-grabbing"
             >
               <div className="card-base p-8 sm:p-12 text-center shadow-card-hover border-primary/10 bg-card">
                 <Quote className="mx-auto text-primary/20 mb-6" size={36} />

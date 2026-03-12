@@ -11,6 +11,7 @@ const Projects = () => {
   const [filter, setFilter] = useState<ProjectCategory>("All");
   const [isBlackout, setIsBlackout] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
+  const [isFromTerminal, setIsFromTerminal] = useState(false);
   const [resolveProgress, setResolveProgress] = useState(0);
   const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string, type: string, width?: string, height?: string}[]>([]);
   const [darkness, setDarkness] = useState(0);
@@ -63,14 +64,19 @@ const Projects = () => {
               setIsResolving(false);
               setDarkness(0);
               document.body.style.overflow = 'auto';
-              toast((
-                <div className="font-mono-code flex flex-col gap-1 w-full text-xs">
-                  <div className="text-foreground"><span className="text-primary font-bold">$</span> cat /etc/portfolio/location</div>
-                  <div className="text-destructive font-bold mt-1">ERROR: 404_ALREADY_HERE</div>
-                  <div className="text-muted-foreground opacity-80">&gt; Target location identical to current directory.</div>
-                  <div className="text-muted-foreground opacity-80">&gt; Where are you trying to go? lol</div>
-                </div>
-              ), { style: { backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' } });
+              if (isFromTerminal) {
+                document.dispatchEvent(new CustomEvent('terminal-easter-egg-resolved'));
+              } else {
+                toast((
+                  <div className="font-mono-code flex flex-col gap-1 w-full text-xs">
+                    <div className="text-foreground"><span className="text-primary font-bold">$</span> cat /etc/portfolio/location</div>
+                    <div className="text-destructive font-bold mt-1">ERROR: 404_ALREADY_HERE</div>
+                    <div className="text-muted-foreground opacity-80">&gt; Target location identical to current directory.</div>
+                    <div className="text-muted-foreground opacity-80">&gt; Where are you trying to go? lol</div>
+                    <div className="text-muted-foreground opacity-80">&gt; You are already in my portfolio</div>
+                  </div>
+                ), { style: { backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' } });
+              }
             }, 1200); // Wait bit longer on 100% to show completion
             return [];
           }
@@ -98,7 +104,8 @@ const Projects = () => {
   };
 
   useEffect(() => {
-    const handleTrigger = () => {
+    const handleTrigger = (e: any) => {
+      setIsFromTerminal(e.detail?.fromTerminal || false);
       setIsBlackout(true);
       setIsResolving(false);
       setResolveProgress(0);
@@ -175,8 +182,8 @@ const Projects = () => {
                   if (!isResolving) setIsResolving(true);
                 }}
               >
-                <div className="absolute -top-10 bg-background border-2 border-primary rounded-lg p-3">
-                  <Terminal className="text-primary" size={40} />
+                <div className="absolute -top-8 bg-background border-2 border-primary rounded-lg px-4 py-2">
+                  <span className="font-display font-black text-2xl sm:text-3xl text-primary tracking-tight">&lt;SB /&gt;</span>
                 </div>
                 
                 <h1 className={`font-mono-code text-xl sm:text-2xl font-bold tracking-widest uppercase text-center mt-6 ${resolveProgress === 100 ? 'text-green-500' : 'text-primary animate-pulse'}`}>
@@ -209,7 +216,7 @@ const Projects = () => {
                          Awaiting user manual override to restore.
                        </p>
                     </div>
-                    <button className="text-primary-foreground font-mono-code text-[10px] sm:text-xs md:text-sm font-semibold border-2 border-primary px-3 sm:px-4 py-3 rounded-lg bg-primary hover:bg-primary/90 transition-all cursor-pointer text-center animate-pulse w-full shadow-lg">
+                    <button className="text-primary-foreground font-mono-code text-[10px] sm:text-xs md:text-sm font-semibold border-2 border-primary px-3 sm:px-4 py-3 rounded-lg bg-primary hover:bg-primary/90 transition-all cursor-pointer text-center w-full shadow-lg">
                       CLICK ANYWHERE ON SCREEN TO RESTORE
                     </button>
                   </>

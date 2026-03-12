@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { personalInfo, skillCategories } from '@/lib/portfolio-data';
+import { personalInfo, skillCategories, projects } from '@/lib/portfolio-data';
 
 interface DevConsoleProps {
   isOpen: boolean;
@@ -10,7 +10,7 @@ interface DevConsoleProps {
   onEasterEgg: () => void;
 }
 
-type ConsoleLine = { type: 'input' | 'output' | 'error' | 'system'; text: string };
+type ConsoleLine = { type: 'input' | 'output' | 'error' | 'system' | 'link' | 'portfolio-link'; text: string; url?: string };
 
 const COMMANDS: Record<string, string> = {
   help: "List all available commands",
@@ -55,6 +55,24 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
     setLines(prev => [...prev, { type, text }]);
   }, []);
 
+  useEffect(() => {
+    const handleResolved = () => {
+      addLine('output', '\n[System] Resolving recursive anomaly...');
+      setTimeout(() => {
+        addLine('error', '$ cat /etc/portfolio/location');
+        addLine('error', 'ERROR: 404_ALREADY_HERE');
+        addLine('output', '  > Target location identical to current directory.');
+        addLine('output', '  > Where are you trying to go? lol');
+        addLine('output', '  > You are already in my portfolio\n');
+        setTimeout(() => {
+          scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+        }, 50);
+      }, 500);
+    };
+    document.addEventListener('terminal-easter-egg-resolved', handleResolved);
+    return () => document.removeEventListener('terminal-easter-egg-resolved', handleResolved);
+  }, [addLine]);
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -91,8 +109,19 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
         addLine('output', '');
         break;
       case 'projects':
-        scrollTo('projects');
-        addLine('output', '→ Scrolling to projects...');
+        addLine('output', '\nFeatured Projects:');
+        projects.forEach(p => {
+          addLine('output', `\n  [${p.title}]`);
+          setLines(prev => [...prev, { type: 'link', text: `    Code: ${p.github}`, url: p.github }]);
+          if (p.live !== '#') {
+            if (p.title === 'Portfolio Website') {
+               setLines(prev => [...prev, { type: 'portfolio-link', text: `    Live: ${p.live}`, url: p.live }]);
+            } else {
+               setLines(prev => [...prev, { type: 'link', text: `    Live: ${p.live}`, url: p.live }]);
+            }
+          }
+        });
+        addLine('output', '\n(Click the links above to open them)\n');
         break;
       case 'experience':
         scrollTo('experience');
@@ -213,14 +242,20 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
             {lines.map((line, i) => (
               <div
                 key={i}
-                className={`whitespace-pre-wrap leading-relaxed ${
+                className={`leading-relaxed ${
                   line.type === 'input' ? 'text-primary' :
-                  line.type === 'error' ? 'text-destructive' :
-                  line.type === 'system' ? 'opacity-60' : ''
+                  line.type === 'error' ? 'text-destructive whitespace-pre-wrap' :
+                  line.type === 'system' ? 'opacity-60 whitespace-pre-wrap' : 'whitespace-pre-wrap'
                 }`}
                 style={{ color: line.type === 'output' ? 'hsl(var(--terminal-foreground))' : undefined }}
               >
-                {line.text}
+                {line.type === 'link' && line.url ? (
+                  <div className="flex whitespace-pre-wrap"><span className="whitespace-pre">{line.text.split(line.url)[0]}</span><a href={line.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-primary transition-colors cursor-pointer">{line.url}</a></div>
+                ) : line.type === 'portfolio-link' && line.url ? (
+                  <div className="flex whitespace-pre-wrap"><span className="whitespace-pre">{line.text.split(line.url)[0]}</span><span onClick={() => { document.dispatchEvent(new CustomEvent('trigger-easter-egg', { detail: { fromTerminal: true } })); }} className="underline hover:text-primary transition-colors cursor-pointer">{line.url}</span></div>
+                ) : (
+                  line.text
+                )}
               </div>
             ))}
           </div>
