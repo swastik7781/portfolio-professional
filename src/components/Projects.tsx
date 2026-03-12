@@ -97,28 +97,28 @@ const Projects = () => {
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }} 
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[9999] bg-background flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
+              className="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
               onClick={handleBlackoutClick}
             >
               {errorLogs.map(log => (
-                <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" style={{ top: log.top, left: log.left }}>
+                <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500/80" style={{ top: log.top, left: log.left }}>
                   {log.text}
                 </div>
               ))}
               <div 
-                className="relative z-10 flex flex-col items-center p-8 bg-background/80 backdrop-blur-md rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.15)]"
+                className="relative z-10 flex flex-col items-center p-8 bg-black border-2 border-red-500/40 max-w-md w-full mx-4 rounded-none"
                 onClick={(e) => {
                   e.stopPropagation(); // keep inner clicks from re-triggering if already handling
                   if (!isResolving) setIsResolving(true);
                 }}
               >
-                <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
+                <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold tracking-widest uppercase text-center">
                   {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
                 </h1>
                 {isResolving ? (
                   <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
                     <svg className="absolute inset-0 w-full h-full -rotate-90">
-                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950" />
+                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950/50" />
                       <motion.circle 
                         cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
                         className="text-red-500"
@@ -127,12 +127,12 @@ const Projects = () => {
                         transition={{ duration: 0.1 }}
                       />
                     </svg>
-                    <span className="font-mono-code text-red-500 font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
+                    <span className="font-mono-code text-red-500 font-bold">{resolveProgress}%</span>
                   </div>
                 ) : (
                   <>
-                    <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
-                    <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer text-center">
+                    <p className="text-red-500/80 font-mono-code text-sm mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
+                    <p className="text-red-500/70 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 bg-red-500/5 transition-colors cursor-pointer text-center rounded-none">
                       [ CLICK ANYWHERE TO INITIALIZE SYSTEM PURGE ]
                     </p>
                   </>

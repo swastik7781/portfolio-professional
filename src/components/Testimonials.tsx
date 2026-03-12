@@ -46,7 +46,7 @@ const Testimonials = () => {
           <motion.div
             initial={false}
             animate={{ x: `-${current * 100}%` }}
-            transition={{ type: "spring", bounce: 0, duration: 0.6 }}
+            transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
