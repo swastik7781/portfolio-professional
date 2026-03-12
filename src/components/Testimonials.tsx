@@ -5,10 +5,17 @@ import { testimonials } from '@/lib/portfolio-data';
 
 const Testimonials = () => {
   const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(0);
   const t = testimonials[current];
 
-  const prev = () => setCurrent((current - 1 + testimonials.length) % testimonials.length);
-  const next = () => setCurrent((current + 1) % testimonials.length);
+  const prev = () => {
+    setDirection(-1);
+    setCurrent((current - 1 + testimonials.length) % testimonials.length);
+  };
+  const next = () => {
+    setDirection(1);
+    setCurrent((current + 1) % testimonials.length);
+  };
 
   const handleDragEnd = (event: any, info: any) => {
     const swipeThreshold = 50;
@@ -39,18 +46,24 @@ const Testimonials = () => {
         </motion.div>
 
         {/* Testimonial card */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout" custom={direction} initial={false}>
           <motion.div
             key={current}
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -16 }}
-            transition={{ duration: 0.3 }}
+            custom={direction}
+            variants={{
+              enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
+              center: { x: 0, opacity: 1 },
+              exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 })
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
-            className="card-base p-8 text-center relative cursor-grab active:cursor-grabbing"
+            className="card-base p-8 text-center relative cursor-grab active:cursor-grabbing w-full"
           >
             <Quote className="mx-auto text-primary/20 mb-6" size={36} />
 

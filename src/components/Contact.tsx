@@ -310,7 +310,7 @@ const Contact = ({ visitorName }: ContactProps) => {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="group w-full sm:w-auto px-6 py-2.5 rounded-xl border border-border bg-transparent text-foreground hover:bg-foreground hover:text-background hover:shadow-lg font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300"
+                    className="group w-full sm:w-auto px-6 py-3 rounded-xl bg-secondary border border-border/50 text-foreground hover:bg-primary/10 hover:border-primary/30 hover:text-primary shadow-sm hover:shadow-[0_0_15px_rgba(var(--primary),0.2)] font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300"
                   >
                     {status === 'sending' ? (
                       <>

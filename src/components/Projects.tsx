@@ -78,7 +78,7 @@ const Projects = () => {
       setIsBlackout(true);
       setIsResolving(false);
       setErrorLogs([]);
-      toast("SYSTEM MALFUNCTION...", { "description": "Critical failure detected." });
+      toast("SYSTEM MALFUNCTION...", { "description": "Just kidding. You're already looking at it!" });
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
@@ -96,7 +96,7 @@ const Projects = () => {
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
+            className="fixed inset-0 z-[999] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
             style={{ backgroundColor: '#050505' }}
             onClick={handleBlackoutClick}
           >
