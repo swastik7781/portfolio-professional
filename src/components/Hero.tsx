@@ -162,19 +162,19 @@ const Hero = ({ onOpenConsole, onLogoClick, visitorName }: HeroProps) => {
                 onClick={onLogoClick}
                 className="font-display text-6xl sm:text-7xl lg:text-8xl xl:text-[7rem] font-bold tracking-tight text-foreground leading-none cursor-default select-none mb-1"
               >
-                I'm Swastik
+                Swastik
                 <br />
-                <span className="text-gradient">Bhardwaj.</span>
+                <span className="text-gradient">Bhardwaj</span>
               </h1>
             </motion.div>
 
             {/* Tagline */}
-            <motion.p
+            <motion.h2
               {...(reducedMotion ? {} : fadeUp(0.3))}
-              className="mt-5 text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed"
+              className="mt-5 text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed font-normal"
             >
-              {personalInfo.tagline}
-            </motion.p>
+              Full Stack MERN Developer
+            </motion.h2>
 
             {/* Sub-line */}
             <motion.p

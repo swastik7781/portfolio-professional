@@ -49,9 +49,11 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            <p className="text-foreground text-base leading-relaxed">
+            <div className="text-foreground text-base leading-relaxed">
+              <strong className="font-semibold text-primary">Swastik Bhardwaj</strong> is a Full Stack MERN Developer specializing in React, Node.js, and scalable web applications.
+              <br /><br />
               {personalInfo.bio}
-            </p>
+            </div>
 
             {/* Philosophy block */}
             <div className="border-l-2 border-primary/30 pl-5 py-1">
