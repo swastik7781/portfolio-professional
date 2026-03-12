@@ -246,6 +246,7 @@ export const testimonials = [
     quote: "Working with Swastik was a great experience. He brings both technical depth and a collaborative mindset to every project. His code quality and attention to detail consistently exceeded expectations.",
     rating: 5,
     photo: "/photos/abhijeet.jpg",
+    portfolio: "https://abhijeet-dash.vercel.app/",
   },
   {
     name: "Khushi Tiwari",

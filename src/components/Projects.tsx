@@ -11,6 +11,30 @@ const Projects = () => {
   const [filter, setFilter] = useState<ProjectCategory>("All");
   const [isBlackout, setIsBlackout] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string}[]>([]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isBlackout) {
+      const msgs = [
+        "0xERR_SYS_FAIL", "OVERRIDE_PROTOCOL_INIT", "MEMORY_LEAK_DETECTED",
+        "BYPASSING_SECURITY_MAINFRAME", "FATAL_EXCEPTION_0x00000008",
+        "KERNEL_PANIC", "REBOOT_REQUIRED", "DATA_CORRUPTION_IMMINENT",
+        "UNAUTHORIZED_ACCESS", "SYSTEM_COMPROMISED", "DECRYPTING_STORE..."
+      ];
+      interval = setInterval(() => {
+        setErrorLogs(prev => [...prev.slice(-25), {
+          id: Date.now(),
+          text: msgs[Math.floor(Math.random() * msgs.length)],
+          top: `${Math.floor(Math.random() * 95)}%`,
+          left: `${Math.floor(Math.random() * 85)}%`
+        }]);
+      }, 250);
+    } else {
+      setErrorLogs([]);
+    }
+    return () => clearInterval(interval);
+  }, [isBlackout]);
 
   const handleBlackoutClick = () => {
     setIsBlackout(false);
@@ -40,12 +64,19 @@ const Projects = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 bg-black z-[200] flex items-center justify-center flex-col gap-4 cursor-pointer"
+            className="fixed inset-0 bg-background z-[200] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
             onClick={handleBlackoutClick}
           >
-            <h1 className="text-destructive font-mono-code text-2xl animate-pulse tracking-widest uppercase text-center px-4">Fatal Reality Error</h1>
-            <p className="text-muted-foreground font-mono-code text-sm animate-pulse">Initiating fallback protocols...</p>
-            <p className="text-muted-foreground font-mono-code text-xs mt-8 opacity-70">(Click anywhere to bypass system failure)</p>
+            {errorLogs.map(log => (
+              <div key={log.id} className="absolute text-destructive/30 font-mono-code text-xs md:text-sm whitespace-nowrap pointer-events-none" style={{ top: log.top, left: log.left }}>
+                {log.text}
+              </div>
+            ))}
+            <div className="relative z-10 flex flex-col items-center">
+              <h1 className="text-destructive font-mono-code text-2xl animate-pulse tracking-widest uppercase text-center px-4">Fatal Reality Error</h1>
+              <p className="text-muted-foreground font-mono-code text-sm animate-pulse">Initiating fallback protocols...</p>
+              <p className="text-muted-foreground font-mono-code text-xs mt-8 opacity-70">(Click anywhere to bypass system failure)</p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -131,16 +162,16 @@ const Projects = () => {
                     </a>
                   </div>
 
-                  {/* Links */}
-                  <div className="flex gap-1.5 shrink-0">
+                  <div className="flex gap-2 shrink-0">
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all duration-200"
-                      aria-label="GitHub"
+                      className="px-3 py-1.5 h-8 rounded-lg border border-border flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-secondary transition-all duration-200"
+                      aria-label="Code"
                     >
                       <Github size={14} />
+                      <span>Code</span>
                     </a>
                     {project.live !== "#" && (
                       <a
@@ -153,10 +184,11 @@ const Projects = () => {
                             document.dispatchEvent(new CustomEvent('trigger-easter-egg'));
                           }
                         }}
-                        className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all duration-200"
-                        aria-label="Live demo"
+                        className="px-3 py-1.5 h-8 rounded-lg border border-border flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-secondary transition-all duration-200"
+                        aria-label="Live Demo"
                       >
                         <ExternalLink size={14} />
+                        <span>Live Demo</span>
                       </a>
                     )}
                   </div>

@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Github, Linkedin, Mail, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Mail, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { personalInfo } from '@/lib/portfolio-data';
 
 interface ContactProps {
@@ -310,7 +310,7 @@ const Contact = ({ visitorName }: ContactProps) => {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="w-full sm:w-auto btn-primary flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="group w-full sm:w-auto btn-primary flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {status === 'sending' ? (
                       <>
@@ -319,8 +319,8 @@ const Contact = ({ visitorName }: ContactProps) => {
                       </>
                     ) : (
                       <>
-                        <Send size={14} />
-                        Send Message
+                        <span>Send Message</span>
+                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
                       </>
                     )}
                   </button>
