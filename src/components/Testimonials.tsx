@@ -1,40 +1,39 @@
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight, Quote, ExternalLink } from 'lucide-react';
 import { testimonials } from '@/lib/portfolio-data';
 
 const Testimonials = () => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [current, setCurrent] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
 
-  const checkScroll = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-    }
+  const prev = () => {
+    setCurrent((current - 1 + testimonials.length) % testimonials.length);
+  };
+  const next = () => {
+    setCurrent((current + 1) % testimonials.length);
   };
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      // Find the first card to get the exact scroll distance needed (1 card width + gap)
-      const firstCard = scrollContainerRef.current.querySelector('.snap-center') as HTMLElement;
-      if (firstCard) {
-        const scrollAmount = direction === 'left' ? -firstCard.offsetWidth : firstCard.offsetWidth;
-        scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      } else {
-        // Fallback
-        const { clientWidth } = scrollContainerRef.current;
-        const scrollAmount = direction === 'left' ? -(clientWidth / 1.5) : (clientWidth / 1.5);
-        scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    
+    // swipe left (next)
+    if (diff > 50) next();
+    // swipe right (prev)
+    if (diff < -50) prev();
+    
+    setTouchStart(null);
   };
 
   return (
     <section className="py-24 px-4 sm:px-6 bg-secondary/20 relative z-10">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
 
         {/* Section header */}
         <motion.div
@@ -51,89 +50,93 @@ const Testimonials = () => {
           <div className="section-divider mx-auto" />
         </motion.div>
 
-        {/* Testimonial slider using native snap scrolling */}
-        <div className="relative group">
-          <div 
-            ref={scrollContainerRef}
-            onScroll={checkScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 sm:gap-6 pb-8 pt-4 px-4 sm:px-2 cursor-grab active:cursor-grabbing touch-pan-x"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
-          >
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="w-[85vw] sm:w-[500px] shrink-0 snap-center">
-                <div className="card-base p-6 sm:p-8 text-center h-full flex flex-col justify-between transition-all duration-300 hover:shadow-card-hover border-primary/10">
-                  <div>
-                    <Quote className="mx-auto text-primary/20 mb-4 sm:mb-6" size={32} />
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic max-w-xl mx-auto">
-                      "{t.quote}"
-                    </p>
-                    {/* Stars */}
-                    <div className="flex justify-center gap-1 mb-6">
-                      {Array.from({ length: t.rating }).map((_, i) => (
-                        <Star key={i} size={14} className="fill-primary text-primary" />
-                      ))}
-                    </div>
-                  </div>
+        {/* Clean Single-Card Fade Carousel */}
+        <div 
+          className="relative min-h-[400px] flex items-center justify-center p-2"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="w-full sm:w-[85%] md:w-[75%] absolute"
+            >
+              <div className="card-base p-8 sm:p-12 text-center shadow-card-hover border-primary/10 bg-card">
+                <Quote className="mx-auto text-primary/20 mb-6" size={36} />
+                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-8 italic max-w-2xl mx-auto">
+                  "{testimonials[current].quote}"
+                </p>
+                {/* Stars */}
+                <div className="flex justify-center gap-1 mb-8">
+                  {Array.from({ length: testimonials[current].rating }).map((_, i) => (
+                    <Star key={i} size={16} className="fill-primary text-primary" />
+                  ))}
+                </div>
 
-                  <div className="flex flex-col items-center gap-3 mt-auto">
-                    <div className="w-16 h-16 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center shadow-sm">
-                      {t.photo ? (
-                        <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-muted-foreground font-mono-code text-xl">{t.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <div>
-                      <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
-                      <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{t.role}</div>
-                      {t.portfolio && (
-                        <a
-                          href={t.portfolio}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-primary/20 transition-all duration-300"
-                        >
-                          View Portfolio <ExternalLink size={12} />
-                        </a>
-                      )}
-                    </div>
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 bg-secondary/50 flex items-center justify-center shadow-sm">
+                    {testimonials[current].photo ? (
+                      <img src={testimonials[current].photo} alt={testimonials[current].name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-muted-foreground font-mono-code text-xl">{testimonials[current].name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-display font-semibold text-foreground text-sm sm:text-base">{testimonials[current].name}</div>
+                    <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{testimonials[current].role}</div>
+                    {testimonials[current].portfolio && (
+                      <a
+                        href={testimonials[current].portfolio}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-primary/20 transition-all duration-300"
+                      >
+                        View Portfolio <ExternalLink size={12} />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Navigation Buttons for Desktop/Easy access */}
-          {testimonials.length > 1 && (
-            <div className="flex items-center justify-center gap-4 mt-2">
-              <button
-                onClick={() => scroll('left')}
-                disabled={!canScrollLeft}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft size={18} />
-              </button>
-
-              <button
-                onClick={() => scroll('right')}
-                disabled={!canScrollRight}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          )}
+            </motion.div>
+          </AnimatePresence>
         </div>
+
+        {/* Navigation Buttons */}
+        {testimonials.length > 1 && (
+          <div className="flex items-center justify-center gap-6 mt-16 relative z-20">
+            <button
+              onClick={prev}
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-200 shadow-sm"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            
+            <div className="flex gap-2">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`rounded-full transition-all duration-300 ${i === current ? 'w-6 h-1.5 bg-primary' : 'w-1.5 h-1.5 bg-border hover:bg-muted-foreground'}`}
+                  aria-label={`Go to testimonial ${i + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={next}
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-200 shadow-sm"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        )}
       </div>
-      
-      {/* Hide scrollbar styles for webkit */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-      `}} />
     </section>
   );
 };

@@ -63,7 +63,14 @@ const Projects = () => {
               setIsResolving(false);
               setDarkness(0);
               document.body.style.overflow = 'auto';
-              toast.success("Error Code: 404", { description: "You are already here on my portfolio lol. System nominal." });
+              toast((
+                <div className="font-mono-code flex flex-col gap-1 w-full text-xs">
+                  <div className="text-foreground"><span className="text-primary font-bold">$</span> cat /etc/portfolio/location</div>
+                  <div className="text-destructive font-bold mt-1">ERROR: 404_ALREADY_HERE</div>
+                  <div className="text-muted-foreground opacity-80">&gt; Target location identical to current directory.</div>
+                  <div className="text-muted-foreground opacity-80">&gt; Where are you trying to go? lol</div>
+                </div>
+              ), { style: { backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' } });
             }, 1200); // Wait bit longer on 100% to show completion
             return [];
           }
@@ -94,6 +101,7 @@ const Projects = () => {
     const handleTrigger = () => {
       setIsBlackout(true);
       setIsResolving(false);
+      setResolveProgress(0);
       setErrorLogs([]);
       setDarkness(0);
     };
@@ -111,8 +119,8 @@ const Projects = () => {
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
-              exit={isResolving && resolveProgress === 100 ? { scale: 0, opacity: 0, borderRadius: "100%" } : { opacity: 0 }} 
-              transition={{ duration: isResolving && resolveProgress === 100 ? 0.5 : 0.2, ease: "easeInOut" }}
+              exit={isResolving && resolveProgress === 100 ? { y: "150vh", rotate: 15, opacity: 0 } : { opacity: 0 }} 
+              transition={{ duration: isResolving && resolveProgress === 100 ? 1 : 0.2, ease: "easeIn" }}
               className="fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden cursor-pointer"
               style={{ backgroundColor: `rgba(0, 0, 0, ${darkness})` }}
               onClick={handleBlackoutClick}
@@ -146,7 +154,7 @@ const Projects = () => {
                   );
                 } else {
                   content = (
-                    <div className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]">
+                    <div className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none text-primary">
                       {log.text}
                     </div>
                   );
@@ -161,14 +169,14 @@ const Projects = () => {
               
               {/* Central Box */}
               <div 
-                className={`relative z-50 flex flex-col items-center p-6 sm:p-8 bg-background/95 backdrop-blur-xl rounded-2xl border-2 border-primary w-[90vw] sm:w-[85vw] max-w-lg shadow-[0_0_80px_hsl(var(--primary)/0.3)] transition-all duration-300 ${resolveProgress === 100 ? 'border-green-500 shadow-[0_0_80px_rgba(34,197,94,0.4)]' : ''}`}
+                className={`relative z-50 flex flex-col items-center p-6 sm:p-8 bg-background/95 backdrop-blur-xl rounded-2xl border-2 border-primary w-[90vw] sm:w-[85vw] max-w-lg shadow-2xl transition-all duration-300 ${resolveProgress === 100 ? 'border-green-500' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation(); 
                   if (!isResolving) setIsResolving(true);
                 }}
               >
-                <div className="absolute -top-10 bg-background border-2 border-primary rounded-lg p-3 rotate-3">
-                  <Cpu className="text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.5)] bg-background" size={40} />
+                <div className="absolute -top-10 bg-background border-2 border-primary rounded-lg p-3">
+                  <Terminal className="text-primary" size={40} />
                 </div>
                 
                 <h1 className={`font-mono-code text-xl sm:text-2xl font-bold tracking-widest uppercase text-center mt-6 ${resolveProgress === 100 ? 'text-green-500' : 'text-primary animate-pulse'}`}>
@@ -201,7 +209,7 @@ const Projects = () => {
                          Awaiting user manual override to restore.
                        </p>
                     </div>
-                    <button className="text-primary-foreground font-mono-code text-[10px] sm:text-xs md:text-sm font-semibold border-2 border-primary px-3 sm:px-4 py-3 rounded-lg bg-primary hover:bg-primary/90 transition-all cursor-pointer text-center animate-pulse w-full shadow-[0_0_20px_hsl(var(--primary)/0.3)]">
+                    <button className="text-primary-foreground font-mono-code text-[10px] sm:text-xs md:text-sm font-semibold border-2 border-primary px-3 sm:px-4 py-3 rounded-lg bg-primary hover:bg-primary/90 transition-all cursor-pointer text-center animate-pulse w-full shadow-lg">
                       CLICK ANYWHERE ON SCREEN TO RESTORE
                     </button>
                   </>
