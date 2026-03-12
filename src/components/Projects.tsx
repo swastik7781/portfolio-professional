@@ -110,6 +110,7 @@ const Projects = () => {
       setIsFromTerminal(e.detail?.fromTerminal || false);
       setIsFreezing(true);
       setIsBlackout(false);
+      document.body.classList.add('animate-glitch-shake');
       
       freezeTimer = setTimeout(() => {
         setIsFreezing(false);
@@ -118,11 +119,13 @@ const Projects = () => {
         setResolveProgress(0);
         setErrorLogs([]);
         setDarkness(0);
+        document.body.classList.remove('animate-glitch-shake');
       }, 1500);
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => {
       document.removeEventListener('trigger-easter-egg', handleTrigger);
+      document.body.classList.remove('animate-glitch-shake');
       clearTimeout(freezeTimer);
     };
   }, []);
@@ -140,13 +143,7 @@ const Projects = () => {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[9999] pointer-events-auto cursor-none select-none flex flex-col justify-between"
             >
-              {/* Screen freeze effect with heavy contrast and slight sepia */}
-              <div className="absolute inset-0" style={{ backdropFilter: 'saturate(50%) contrast(150%) sepia(30%) hue-rotate(5deg)' }}></div>
               <div className="absolute inset-0 bg-primary/5 animate-[pulse_0.15s_ease-in-out_infinite] mix-blend-overlay"></div>
-              {/* Fake screen tears */}
-              <div className="w-full h-[2px] bg-white/20 absolute top-[20%] skew-y-1"></div>
-              <div className="w-full h-[4px] bg-white/10 absolute top-[60%] -skew-y-1"></div>
-              <div className="w-full h-[1px] bg-black/40 absolute top-[80%]"></div>
             </motion.div>
           )}
 

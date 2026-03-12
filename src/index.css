@@ -208,6 +208,21 @@
     @apply max-w-5xl mx-auto;
   }
 
+  /* Glitch Shake Animation */
+  @keyframes glitch-shake {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(-3px, -3px); }
+    60% { transform: translate(3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .animate-glitch-shake {
+    animation: glitch-shake 0.1s ease-in-out infinite;
+    filter: contrast(120%) saturate(120%) hue-rotate(5deg);
+  }
+
   /* Section heading — larger, more presence */
   .section-label {
     @apply font-mono-code text-xs text-primary tracking-widest uppercase mb-3;
