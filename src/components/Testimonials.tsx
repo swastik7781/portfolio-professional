@@ -5,15 +5,11 @@ import { testimonials } from '@/lib/portfolio-data';
 
 const Testimonials = () => {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const t = testimonials[current];
 
   const prev = () => {
-    setDirection(-1);
     setCurrent((current - 1 + testimonials.length) % testimonials.length);
   };
   const next = () => {
-    setDirection(1);
     setCurrent((current + 1) % testimonials.length);
   };
 
@@ -45,66 +41,61 @@ const Testimonials = () => {
           <div className="section-divider mx-auto" />
         </motion.div>
 
-        {/* Testimonial card */}
-        <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+        {/* Testimonial slider */}
+        <div className="overflow-hidden w-full relative">
           <motion.div
-            key={current}
-            custom={direction}
-            variants={{
-              enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
-              center: { x: 0, opacity: 1 },
-              exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 })
-            }}
-            initial="enter"
-            animate="center"
-            exit="exit"
+            animate={{ x: `-${current * 100}%` }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
-            className="card-base p-8 text-center relative cursor-grab active:cursor-grabbing w-full"
+            className="flex cursor-grab active:cursor-grabbing"
           >
-            <Quote className="mx-auto text-primary/20 mb-6" size={36} />
+            {testimonials.map((t, idx) => (
+              <div key={idx} className="w-full shrink-0 px-2 sm:px-4">
+                <div className="card-base p-8 text-center h-full">
+                  <Quote className="mx-auto text-primary/20 mb-6" size={36} />
 
-            <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic max-w-xl mx-auto">
-              "{t.quote}"
-            </p>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic max-w-xl mx-auto">
+                    "{t.quote}"
+                  </p>
 
-            {/* Stars */}
-            <div className="flex justify-center gap-1 mb-6">
-              {Array.from({ length: t.rating }).map((_, i) => (
-                <Star key={i} size={14} className="fill-primary text-primary" />
-              ))}
-            </div>
+                  {/* Stars */}
+                  <div className="flex justify-center gap-1 mb-6">
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star key={i} size={14} className="fill-primary text-primary" />
+                    ))}
+                  </div>
 
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center">
-                {t.photo ? (
-                  <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-muted-foreground font-mono-code text-xl">{t.name.charAt(0)}</span>
-                )}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center">
+                      {t.photo ? (
+                        <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-muted-foreground font-mono-code text-xl">{t.name.charAt(0)}</span>
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
+                      <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{t.role}</div>
+                      {t.portfolio && (
+                        <a
+                          href={t.portfolio}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-primary/20 transition-all duration-300"
+                        >
+                          View Portfolio <ExternalLink size={12} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div className="font-display font-semibold text-foreground text-sm">{t.name}</div>
-                <div className="font-mono-code text-xs text-muted-foreground mt-0.5">{t.role}</div>
-                {t.portfolio && (
-                  <motion.a
-                    href={t.portfolio}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-primary/20 transition-all duration-300"
-                  >
-                    View Portfolio <ExternalLink size={12} />
-                  </motion.a>
-                )}
-              </div>
-            </div>
+            ))}
           </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* Navigation */}
         {testimonials.length > 1 && (

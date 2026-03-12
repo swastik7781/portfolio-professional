@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Star } from 'lucide-react';
 import { toast } from 'sonner';
@@ -52,7 +53,7 @@ const Projects = () => {
               setIsBlackout(false);
               setIsResolving(false);
               setShowConfetti(true);
-              toast("System Restored.", { "description": "All vulnerabilities patched. Have some confetti!" });
+              toast("Error Code: 0x404", { "description": "Lol you're already in my portfolio, where you trynna go? Enjoy some confetti!" });
               setTimeout(() => setShowConfetti(false), 5000);
             }, 600);
             return [];
@@ -89,52 +90,54 @@ const Projects = () => {
   return (
     <section id="projects" className="py-24 px-4 sm:px-6 bg-background relative z-20">
       <Confetti show={showConfetti} />
-      <AnimatePresence>
-        {isBlackout && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
-            style={{ backgroundColor: '#050505' }}
-            onClick={handleBlackoutClick}
-          >
-            {errorLogs.map(log => (
-              <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" style={{ top: log.top, left: log.left }}>
-                {log.text}
-              </div>
-            ))}
-            <div className="relative z-10 flex flex-col items-center p-8 bg-black/40 backdrop-blur-sm rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-2xl">
-              <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
-                {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
-              </h1>
-              {isResolving ? (
-                <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
-                  <svg className="absolute inset-0 w-full h-full -rotate-90">
-                    <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950" />
-                    <motion.circle 
-                      cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
-                      className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]"
-                      strokeDasharray="251.2"
-                      strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
-                      transition={{ duration: 0.1 }}
-                    />
-                  </svg>
-                  <span className="font-mono-code text-red-500 font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {isBlackout && (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[9999] bg-background flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
+              onClick={handleBlackoutClick}
+            >
+              {errorLogs.map(log => (
+                <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" style={{ top: log.top, left: log.left }}>
+                  {log.text}
                 </div>
-              ) : (
-                <>
-                  <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
-                  <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer text-center">
-                    [ CLICK TO INITIALIZE SYSTEM PURGE ]
-                  </p>
-                </>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              ))}
+              <div className="relative z-10 flex flex-col items-center p-8 bg-background/80 backdrop-blur-md rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.15)]">
+                <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
+                  {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
+                </h1>
+                {isResolving ? (
+                  <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
+                    <svg className="absolute inset-0 w-full h-full -rotate-90">
+                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950" />
+                      <motion.circle 
+                        cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
+                        className="text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]"
+                        strokeDasharray="251.2"
+                        strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
+                        transition={{ duration: 0.1 }}
+                      />
+                    </svg>
+                    <span className="font-mono-code text-red-500 font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
+                    <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer text-center">
+                      [ CLICK TO INITIALIZE SYSTEM PURGE ]
+                    </p>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
       <div className="max-w-7xl mx-auto">
 
         {/* Section header */}
