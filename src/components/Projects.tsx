@@ -138,20 +138,20 @@ const Projects = () => {
                 let content;
                 if (log.type === 'window') {
                   content = (
-                    <div className="bg-background border border-primary/40 p-3 rounded-md shadow-2xl flex flex-col gap-2 min-w-[200px] pointer-events-none opacity-90">
-                       <div className="flex items-center gap-2 border-b border-border pb-2 bg-primary/10 -m-3 mb-2 p-2">
-                         <X className="text-primary h-4 w-4" />
-                         <span className="text-xs font-bold font-mono text-primary">System.Alert</span>
+                    <div className="bg-background border border-primary/40 p-2 sm:p-3 rounded-md shadow-2xl flex flex-col gap-2 min-w-[150px] max-w-[90vw] overflow-hidden pointer-events-none opacity-90">
+                       <div className="flex items-center gap-2 border-b border-border pb-2 bg-primary/10 -m-2 sm:-m-3 mb-2 p-2">
+                         <X className="text-primary h-3 w-3 sm:h-4 sm:w-4" />
+                         <span className="text-[10px] sm:text-xs font-bold font-mono text-primary">System.Alert</span>
                        </div>
-                       <div className="flex items-center gap-3">
-                         <Bug className="text-primary animate-pulse h-8 w-8" />
-                         <span className="font-mono-code text-sm font-bold text-foreground">{log.text}</span>
+                       <div className="flex items-center gap-2 sm:gap-3">
+                         <Bug className="text-primary animate-pulse h-6 w-6 sm:h-8 sm:w-8 shrink-0" />
+                         <span className="font-mono-code text-xs sm:text-sm font-bold text-foreground break-all">{log.text}</span>
                        </div>
                     </div>
                   );
                 } else if (log.type === 'box') {
                   content = (
-                    <div className="bg-primary text-primary-foreground font-mono-code text-sm font-bold p-2 border border-black whitespace-nowrap pointer-events-none drop-shadow-lg opacity-80">
+                    <div className="bg-primary text-primary-foreground font-mono-code text-xs sm:text-sm font-bold p-1.5 sm:p-2 border border-black max-w-[90vw] break-all pointer-events-none drop-shadow-lg opacity-80">
                       [ERROR] {log.text}
                     </div>
                   );
@@ -161,7 +161,7 @@ const Projects = () => {
                   );
                 } else {
                   content = (
-                    <div className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none text-primary">
+                    <div className="font-mono-code text-[10px] sm:text-sm md:text-base font-bold max-w-[90vw] break-all pointer-events-none text-primary">
                       {log.text}
                     </div>
                   );
@@ -186,20 +186,17 @@ const Projects = () => {
                   <span className="font-display font-black text-2xl sm:text-3xl text-primary tracking-tight">&lt;SB /&gt;</span>
                 </div>
                 
-                <h1 className={`font-mono-code text-xl sm:text-2xl font-bold tracking-widest uppercase text-center mt-6 ${resolveProgress === 100 ? 'text-green-500' : 'text-primary animate-pulse'}`}>
+                <h1 className={`font-mono-code text-lg sm:text-xl md:text-2xl font-bold tracking-widest uppercase text-center mt-6 ${resolveProgress === 100 ? 'text-green-500' : 'text-primary animate-pulse'}`}>
                   {resolveProgress === 100 ? "SYSTEM NOMINAL" : (isResolving ? "RESTORING PROTOCOLS..." : "SYSTEM CRASH DETECTED")}
                 </h1>
                 
                 {isResolving ? (
-                  <div className="mt-8 relative w-full max-w-xs h-6 bg-secondary rounded-full overflow-hidden border border-border">
-                    <motion.div 
-                      className={`absolute top-0 left-0 bottom-0 ${resolveProgress === 100 ? 'bg-green-500' : 'bg-primary'}`}
-                      initial={{ width: "0%" }}
-                      animate={{ width: `${resolveProgress}%` }}
-                      transition={{ duration: 0.1 }}
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center font-mono-code text-xs font-bold text-white mix-blend-difference">
-                      {resolveProgress}%
+                  <div className="mt-8 mb-4 relative w-full flex flex-col items-center">
+                    <div className="font-mono-code text-xs sm:text-sm text-primary mb-3 text-center tracking-widest break-all">
+                      [{resolveProgress === 100 ? "█".repeat(20) : "█".repeat(Math.floor(resolveProgress / 5))}{"░".repeat(20 - Math.floor(resolveProgress / 5))}]
+                    </div>
+                    <div className="font-mono-code text-[10px] sm:text-xs text-muted-foreground animate-pulse">
+                      RESTORING CORE... {resolveProgress}%
                     </div>
                   </div>
                 ) : (

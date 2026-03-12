@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Maximize2, Minimize2 } from 'lucide-react';
 import { personalInfo, skillCategories, projects } from '@/lib/portfolio-data';
 
 interface DevConsoleProps {
@@ -16,7 +16,7 @@ const COMMANDS: Record<string, string> = {
   help: "List all available commands",
   about: "Display developer bio",
   skills: "Show skills with proficiency",
-  projects: "Scroll to projects section",
+  projects: "Show all projects",
   experience: "Scroll to experience section",
   contact: "Scroll to contact section",
   "open github": "Open GitHub in new tab",
@@ -40,6 +40,7 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [isMaximized, setIsMaximized] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -217,7 +218,7 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed bottom-0 left-0 right-0 z-[60] h-[50vh] sm:h-[40vh] flex flex-col"
+          className={`fixed bottom-0 left-0 right-0 z-[60] flex flex-col transition-all duration-300 ${isMaximized ? 'h-[100dvh]' : 'h-[50vh] sm:h-[40vh]'}`}
           style={{ background: 'hsl(var(--terminal))' }}
         >
           {/* Header */}
@@ -232,9 +233,14 @@ const DevConsole = ({ isOpen, onClose, onThemeChange, onEasterEgg }: DevConsoleP
                 swastik@portfolio:~
               </span>
             </div>
-            <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
-              <X size={16} />
-            </button>
+            <div className="flex items-center gap-3">
+              <button onClick={() => setIsMaximized(!isMaximized)} className="text-muted-foreground hover:text-foreground">
+                {isMaximized ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+              </button>
+              <button text-muted-foreground hover:text-foreground onClick={onClose} className="text-muted-foreground hover:text-foreground">
+                <X size={16} />
+              </button>
+            </div>
           </div>
 
           {/* Output */}
