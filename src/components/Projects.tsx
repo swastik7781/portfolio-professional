@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, Star } from 'lucide-react';
+import { ExternalLink, Github, AlertTriangle, XCircle, Terminal } from 'lucide-react';
 import { toast } from 'sonner';
 import { projects, type ProjectCategory } from '@/lib/portfolio-data';
-import Confetti from '@/components/Confetti';
 
 const categories: ProjectCategory[] = ["All", "Full Stack", "Machine Learning"];
 
@@ -13,34 +12,44 @@ const Projects = () => {
   const [isBlackout, setIsBlackout] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [resolveProgress, setResolveProgress] = useState(0);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string}[]>([]);
+  const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string, type: string, width?: string, height?: string}[]>([]);
+  const [darkness, setDarkness] = useState(0);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    let darknessInterval: NodeJS.Timeout;
+    
     if (isBlackout && !isResolving) {
+      document.body.style.overflow = 'hidden';
+      
       const msgs = [
         "0xERR_SYS_FAIL", "OVERRIDE_PROTOCOL_INIT", "MEMORY_LEAK_DETECTED",
         "BYPASSING_SECURITY_MAINFRAME", "FATAL_EXCEPTION_0x00000008",
         "KERNEL_PANIC", "REBOOT_REQUIRED", "DATA_CORRUPTION_IMMINENT",
         "UNAUTHORIZED_ACCESS", "SYSTEM_COMPROMISED", "DECRYPTING_STORE..."
       ];
+      const types = ['text', 'box', 'block', 'window'];
+      
       interval = setInterval(() => {
-        // Calculate a safe zone for logs avoiding the center (e.g. 30% to 70%)
         let rTop = Math.random() * 95;
         let rLeft = Math.random() * 95;
-        if (rTop > 25 && rTop < 75 && rLeft > 20 && rLeft < 80) {
-          if (Math.random() > 0.5) rTop = Math.random() * 25; // force top
-          else rTop = 75 + Math.random() * 20; // force bottom
-        }
+        let pType = types[Math.floor(Math.random() * types.length)];
         
-        setErrorLogs(prev => [...prev.slice(-30), {
-          id: Date.now(),
+        setErrorLogs(prev => [...prev.slice(-150), {
+          id: Date.now() + Math.random(),
           text: msgs[Math.floor(Math.random() * msgs.length)],
           top: `${rTop}%`,
-          left: `${rLeft}%`
+          left: `${rLeft}%`,
+          type: pType,
+          width: pType === 'block' ? `${Math.random() * 40 + 10}vw` : undefined,
+          height: pType === 'block' ? `${Math.random() * 20 + 5}vh` : undefined
         }]);
-      }, 150);
+      }, 100);
+
+      darknessInterval = setInterval(() => {
+        setDarkness(prev => Math.min(prev + 0.05, 0.95)); // Slowly darker over time
+      }, 500);
+      
     } else if (isResolving) {
       setResolveProgress(0);
       const totalInitialLogs = errorLogs.length;
@@ -52,21 +61,28 @@ const Projects = () => {
             setTimeout(() => {
               setIsBlackout(false);
               setIsResolving(false);
-              setShowConfetti(true);
-              toast("Error Code: 0x404", { "description": "Lol you're already in my portfolio, where you trynna go? Enjoy some confetti!" });
-              setTimeout(() => setShowConfetti(false), 5000);
+              setDarkness(0);
+              document.body.style.overflow = 'auto';
+              toast.error("Error Code: 404", { description: "You are already here on my portfolio lol. System nominal." });
             }, 600);
             return [];
           }
-          const removedRatio = (totalInitialLogs - (prev.length - 1)) / totalInitialLogs;
+          const removedRatio = (totalInitialLogs - (prev.length - 1)) / (totalInitialLogs || 1);
           setResolveProgress(Math.floor(removedRatio * 100));
-          return prev.slice(1);
+          return prev.slice(3); // remove faster
         });
-      }, 50);
+        setDarkness(prev => Math.max(prev - 0.1, 0));
+      }, 40);
     } else {
       setErrorLogs([]);
+      setDarkness(0);
+      document.body.style.overflow = 'auto';
     }
-    return () => clearInterval(interval);
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(darknessInterval);
+    };
   }, [isBlackout, isResolving]);
 
   const handleBlackoutClick = () => {
@@ -79,6 +95,7 @@ const Projects = () => {
       setIsBlackout(true);
       setIsResolving(false);
       setErrorLogs([]);
+      setDarkness(0);
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
@@ -88,7 +105,6 @@ const Projects = () => {
 
   return (
     <section id="projects" className="py-24 px-4 sm:px-6 bg-background relative z-20">
-      <Confetti show={showConfetti} />
       {typeof document !== 'undefined' && createPortal(
         <AnimatePresence>
           {isBlackout && (
@@ -97,44 +113,99 @@ const Projects = () => {
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }} 
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[9999] bg-background flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
-              onClick={handleBlackoutClick}
+              className="fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden"
+              style={{ backgroundColor: `rgba(0, 0, 0, ${darkness})` }}
             >
-              {errorLogs.map(log => (
-                <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" style={{ top: log.top, left: log.left }}>
-                  {log.text}
-                </div>
-              ))}
+              <div className="absolute inset-0 cursor-crosshair z-0" onClick={handleBlackoutClick} />
+              
+              {/* Vigorously spawning errors */}
+              {errorLogs.map(log => {
+                let content;
+                if (log.type === 'window') {
+                  content = (
+                    <div className="bg-background border-2 border-destructive/80 p-3 rounded-md shadow-2xl flex flex-col gap-2 min-w-[200px] pointer-events-none">
+                       <div className="flex items-center gap-2 border-b border-border pb-2 bg-destructive/10 -m-3 mb-2 p-2">
+                         <XCircle className="text-destructive h-4 w-4" />
+                         <span className="text-xs font-bold font-mono">System.Alert</span>
+                       </div>
+                       <div className="flex items-center gap-3">
+                         <AlertTriangle className="text-destructive animate-pulse h-8 w-8" />
+                         <span className="font-mono-code text-sm font-bold">{log.text}</span>
+                       </div>
+                    </div>
+                  );
+                } else if (log.type === 'box') {
+                  content = (
+                    <div className="bg-destructive text-destructive-foreground font-mono-code text-sm font-bold p-2 border-2 border-black whitespace-nowrap pointer-events-none drop-shadow-lg">
+                      [ERROR] {log.text}
+                    </div>
+                  );
+                } else if (log.type === 'block') {
+                  content = (
+                     <div className="bg-black/90 border border-destructive/30 backdrop-blur-md pointer-events-none" style={{ width: log.width, height: log.height }} />
+                  );
+                } else {
+                  content = (
+                    <div className="font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                      {log.text}
+                    </div>
+                  );
+                }
+                
+                return (
+                  <div key={log.id} className="absolute z-10" style={{ top: log.top, left: log.left }}>
+                    {content}
+                  </div>
+                );
+              })}
+              
+              {/* Central Box */}
               <div 
-                className="relative z-10 flex flex-col items-center p-8 bg-background/80 backdrop-blur-md rounded-2xl border border-red-500/20 max-w-md w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.15)]"
+                className="relative z-50 flex flex-col items-center p-8 bg-background/90 backdrop-blur-xl rounded-2xl border-2 border-destructive max-w-lg w-full mx-4 shadow-[0_0_80px_rgba(239,68,68,0.4)]"
                 onClick={(e) => {
-                  e.stopPropagation(); // keep inner clicks from re-triggering if already handling
+                  e.stopPropagation(); 
                   if (!isResolving) setIsResolving(true);
                 }}
               >
-                <h1 className="text-red-500 font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
-                  {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
+                <div className="absolute -top-12 animate-bounce">
+                  <AlertTriangle className="text-destructive drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-background rounded-full p-2" size={80} />
+                </div>
+                
+                <h1 className="text-destructive font-mono-code text-2xl sm:text-3xl font-bold animate-pulse tracking-widest uppercase text-center mt-6">
+                  {isResolving ? "PURGING SYSTEM..." : "SYSTEM CRASH DETECTED"}
                 </h1>
+                
                 {isResolving ? (
                   <div className="mt-8 relative w-24 h-24 flex items-center justify-center">
                     <svg className="absolute inset-0 w-full h-full -rotate-90">
-                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-red-950" />
+                      <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" className="text-destructive/20" />
                       <motion.circle 
                         cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="4" fill="none" 
-                        className="text-red-500"
+                        className="text-destructive"
                         strokeDasharray="251.2"
                         strokeDashoffset={251.2 - (251.2 * resolveProgress) / 100}
                         transition={{ duration: 0.1 }}
                       />
                     </svg>
-                    <span className="font-mono-code text-red-500 font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
+                    <span className="font-mono-code text-destructive font-bold drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">{resolveProgress}%</span>
                   </div>
                 ) : (
                   <>
-                    <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4 text-center">CRITICAL: Mainframe override triggered.</p>
-                    <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer text-center">
-                      [ CLICK ANYWHERE TO INITIALIZE SYSTEM PURGE ]
-                    </p>
+                    <div className="w-full bg-destructive/10 border border-destructive/30 p-4 rounded-lg mt-6 mb-8 text-left">
+                       <div className="flex items-center gap-2 mb-2 text-destructive">
+                         <Terminal size={16} />
+                         <span className="font-mono text-sm font-semibold">Kernel Error Log</span>
+                       </div>
+                       <p className="font-mono text-xs text-muted-foreground opacity-80 h-16 overflow-hidden leading-relaxed">
+                         [FATAL] Multiple sector failures detected.<br/>
+                         [WARN] UI Thread disconnected.<br/>
+                         [CRIT] Reality anchors failing...<br/>
+                         Please initiate manual override.
+                       </p>
+                    </div>
+                    <button className="text-foreground font-mono-code text-[11px] sm:text-xs md:text-sm font-semibold border-2 border-destructive px-4 py-3 rounded-lg bg-destructive hover:bg-destructive/80 transition-all cursor-pointer text-center animate-pulse w-full shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+                      CLICK ANYWHERE ON SCREEN TO FIX / PURGE SYSTEM
+                    </button>
                   </>
                 )}
               </div>

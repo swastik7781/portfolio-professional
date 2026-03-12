@@ -1,29 +1,31 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight, Quote, ExternalLink } from 'lucide-react';
 import { testimonials } from '@/lib/portfolio-data';
 
 const Testimonials = () => {
-  const [current, setCurrent] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const prev = () => {
-    setCurrent((current - 1 + testimonials.length) % testimonials.length);
-  };
-  const next = () => {
-    setCurrent((current + 1) % testimonials.length);
+  const checkScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
   };
 
-  const handleDragEnd = (event: any, info: any) => {
-    const swipeThreshold = 50;
-    if (info.offset.x > swipeThreshold) {
-      prev();
-    } else if (info.offset.x < -swipeThreshold) {
-      next();
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const { clientWidth } = scrollContainerRef.current;
+      const scrollAmount = direction === 'left' ? -clientWidth : clientWidth;
+      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
 
   return (
-    <section className="py-24 px-4 sm:px-6 bg-secondary/20">
+    <section className="py-24 px-4 sm:px-6 bg-secondary/20 relative z-10">
       <div className="max-w-5xl mx-auto">
 
         {/* Section header */}
@@ -41,36 +43,32 @@ const Testimonials = () => {
           <div className="section-divider mx-auto" />
         </motion.div>
 
-        {/* Testimonial slider */}
-        <div className="overflow-hidden w-full relative">
-          <motion.div
-            initial={false}
-            animate={{ x: `-${current * 100}%` }}
-            transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            onDragEnd={handleDragEnd}
-            className="flex cursor-grab active:cursor-grabbing"
+        {/* Testimonial slider using native snap scrolling */}
+        <div className="relative group">
+          <div 
+            ref={scrollContainerRef}
+            onScroll={checkScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pb-8 pt-4 px-2"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {testimonials.map((t, idx) => (
-              <div key={idx} className="w-full shrink-0 px-2 sm:px-4">
-                <div className="card-base p-8 text-center h-full">
-                  <Quote className="mx-auto text-primary/20 mb-6" size={36} />
-
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic max-w-xl mx-auto">
-                    "{t.quote}"
-                  </p>
-
-                  {/* Stars */}
-                  <div className="flex justify-center gap-1 mb-6">
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} size={14} className="fill-primary text-primary" />
-                    ))}
+              <div key={idx} className="w-full sm:w-[80%] md:w-[60%] shrink-0 snap-center">
+                <div className="card-base p-8 text-center h-full flex flex-col justify-between transition-all duration-300 hover:shadow-card-hover">
+                  <div>
+                    <Quote className="mx-auto text-primary/20 mb-6" size={36} />
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic max-w-xl mx-auto">
+                      "{t.quote}"
+                    </p>
+                    {/* Stars */}
+                    <div className="flex justify-center gap-1 mb-6">
+                      {Array.from({ length: t.rating }).map((_, i) => (
+                        <Star key={i} size={14} className="fill-primary text-primary" />
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-16 h-16 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center">
+                  <div className="flex flex-col items-center gap-3 mt-auto">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border border-border bg-secondary/50 flex items-center justify-center shadow-sm">
                       {t.photo ? (
                         <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
                       ) : (
@@ -95,45 +93,42 @@ const Testimonials = () => {
                 </div>
               </div>
             ))}
-          </motion.div>
-        </div>
-
-        {/* Navigation */}
-        {testimonials.length > 1 && (
-          <div className="flex items-center justify-center gap-4 mt-6">
-            <button
-              onClick={prev}
-              className="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-200"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={16} />
-            </button>
-
-            {/* Dots */}
-            <div className="flex gap-1.5">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`rounded-full transition-all duration-200 ${i === current ? 'w-4 h-1.5 bg-primary' : 'w-1.5 h-1.5 bg-border hover:bg-muted-foreground'
-                    }`}
-                  aria-label={`Go to testimonial ${i + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={next}
-              className="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-200"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={16} />
-            </button>
           </div>
-        )}
+
+          {/* Navigation Buttons for Desktop/Easy access */}
+          {testimonials.length > 1 && (
+            <div className="flex items-center justify-center gap-4 mt-2">
+              <button
+                onClick={() => scroll('left')}
+                disabled={!canScrollLeft}
+                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              <button
+                onClick={() => scroll('right')}
+                disabled={!canScrollRight}
+                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+      
+      {/* Hide scrollbar styles for webkit */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}} />
     </section>
   );
 };
 
 export default Testimonials;
+
