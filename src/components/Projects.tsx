@@ -10,12 +10,13 @@ const categories: ProjectCategory[] = ["All", "Full Stack", "Machine Learning"];
 const Projects = () => {
   const [filter, setFilter] = useState<ProjectCategory>("All");
   const [isBlackout, setIsBlackout] = useState(false);
+  const [isResolving, setIsResolving] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string}[]>([]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isBlackout) {
+    if (isBlackout && !isResolving) {
       const msgs = [
         "0xERR_SYS_FAIL", "OVERRIDE_PROTOCOL_INIT", "MEMORY_LEAK_DETECTED",
         "BYPASSING_SECURITY_MAINFRAME", "FATAL_EXCEPTION_0x00000008",
@@ -23,31 +24,47 @@ const Projects = () => {
         "UNAUTHORIZED_ACCESS", "SYSTEM_COMPROMISED", "DECRYPTING_STORE..."
       ];
       interval = setInterval(() => {
-        setErrorLogs(prev => [...prev.slice(-25), {
+        setErrorLogs(prev => [...prev.slice(-30), {
           id: Date.now(),
           text: msgs[Math.floor(Math.random() * msgs.length)],
           top: `${Math.floor(Math.random() * 95)}%`,
-          left: `${Math.floor(Math.random() * 85)}%`
+          left: `${Math.floor(Math.random() * 95)}%`
         }]);
-      }, 250);
+      }, 150);
+    } else if (isResolving) {
+      interval = setInterval(() => {
+        setErrorLogs(prev => {
+          if (prev.length <= 1) {
+            clearInterval(interval);
+            setTimeout(() => {
+              setIsBlackout(false);
+              setIsResolving(false);
+              setShowConfetti(true);
+              toast("System Restored.", { "description": "All vulnerabilities patched. Have some confetti!" });
+              setTimeout(() => setShowConfetti(false), 5000);
+            }, 600);
+            return [];
+          }
+          return prev.slice(1);
+        });
+      }, 50);
     } else {
       setErrorLogs([]);
     }
     return () => clearInterval(interval);
-  }, [isBlackout]);
+  }, [isBlackout, isResolving]);
 
   const handleBlackoutClick = () => {
-    setIsBlackout(false);
-    setShowConfetti(true);
-    toast("Well, you're already here...", { "description": "Might as well enjoy some confetti while you stay." });
-    setTimeout(() => setShowConfetti(false), 5000);
+    if (isResolving) return; // Ignore clicks if already resolving
+    setIsResolving(true);
   };
 
   useEffect(() => {
     const handleTrigger = () => {
-      // Funny blackout & confetti
       setIsBlackout(true);
-      toast("SYSTEM MALFUNCTION...", { "description": "Just kidding. You're already looking at it!" });
+      setIsResolving(false);
+      setErrorLogs([]);
+      toast("SYSTEM MALFUNCTION...", { "description": "Critical failure detected." });
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
     return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
@@ -64,18 +81,28 @@ const Projects = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 bg-background z-[200] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center flex-col gap-4 cursor-pointer overflow-hidden"
+            style={{ backgroundColor: '#050505' }}
             onClick={handleBlackoutClick}
           >
             {errorLogs.map(log => (
-              <div key={log.id} className="absolute text-destructive/30 font-mono-code text-xs md:text-sm whitespace-nowrap pointer-events-none" style={{ top: log.top, left: log.left }}>
+              <div key={log.id} className="absolute font-mono-code text-sm md:text-base font-bold whitespace-nowrap pointer-events-none z-50 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" style={{ top: log.top, left: log.left }}>
                 {log.text}
               </div>
             ))}
-            <div className="relative z-10 flex flex-col items-center">
-              <h1 className="text-destructive font-mono-code text-2xl animate-pulse tracking-widest uppercase text-center px-4">Fatal Reality Error</h1>
-              <p className="text-muted-foreground font-mono-code text-sm animate-pulse">Initiating fallback protocols...</p>
-              <p className="text-muted-foreground font-mono-code text-xs mt-8 opacity-70">(Click anywhere to bypass system failure)</p>
+            <div className="relative z-10 flex flex-col items-center p-8 bg-black/40 backdrop-blur-sm rounded-2xl border border-red-500/20">
+              <h1 className="text-red-500 font-mono-code text-3xl font-bold animate-pulse tracking-widest uppercase text-center drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
+                {isResolving ? "Resolving Errors..." : "Fatal Reality Error"}
+              </h1>
+              {!isResolving && (
+                <>
+                  <p className="text-red-400/80 font-mono-code text-sm animate-pulse mt-4">CRITICAL: Mainframe override triggered.</p>
+                  <p className="text-red-500/60 font-mono-code text-xs mt-8 opacity-90 border border-red-500/30 px-4 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors">
+                    [ CLICK TO INITIALIZE SYSTEM PURGE ]
+                  </p>
+                </>
+              )}
             </div>
           </motion.div>
         )}
