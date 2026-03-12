@@ -15,6 +15,7 @@ const Projects = () => {
   const [resolveProgress, setResolveProgress] = useState(0);
   const [errorLogs, setErrorLogs] = useState<{id: number, text: string, top: string, left: string, type: string, width?: string, height?: string}[]>([]);
   const [darkness, setDarkness] = useState(0);
+  const [isFreezing, setIsFreezing] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -104,16 +105,26 @@ const Projects = () => {
   };
 
   useEffect(() => {
+    let freezeTimer: NodeJS.Timeout;
     const handleTrigger = (e: any) => {
       setIsFromTerminal(e.detail?.fromTerminal || false);
-      setIsBlackout(true);
-      setIsResolving(false);
-      setResolveProgress(0);
-      setErrorLogs([]);
-      setDarkness(0);
+      setIsFreezing(true);
+      setIsBlackout(false);
+      
+      freezeTimer = setTimeout(() => {
+        setIsFreezing(false);
+        setIsBlackout(true);
+        setIsResolving(false);
+        setResolveProgress(0);
+        setErrorLogs([]);
+        setDarkness(0);
+      }, 1500);
     };
     document.addEventListener('trigger-easter-egg', handleTrigger);
-    return () => document.removeEventListener('trigger-easter-egg', handleTrigger);
+    return () => {
+      document.removeEventListener('trigger-easter-egg', handleTrigger);
+      clearTimeout(freezeTimer);
+    };
   }, []);
 
   const filtered = filter === "All" ? projects : projects.filter(p => p.category === filter);
@@ -122,6 +133,23 @@ const Projects = () => {
     <section id="projects" className="py-24 px-4 sm:px-6 bg-background relative z-20">
       {typeof document !== 'undefined' && createPortal(
         <AnimatePresence>
+          {isFreezing && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999] pointer-events-auto cursor-none select-none flex flex-col justify-between"
+            >
+              {/* Screen freeze effect with heavy contrast and slight sepia */}
+              <div className="absolute inset-0" style={{ backdropFilter: 'saturate(50%) contrast(150%) sepia(30%) hue-rotate(5deg)' }}></div>
+              <div className="absolute inset-0 bg-primary/5 animate-[pulse_0.15s_ease-in-out_infinite] mix-blend-overlay"></div>
+              {/* Fake screen tears */}
+              <div className="w-full h-[2px] bg-white/20 absolute top-[20%] skew-y-1"></div>
+              <div className="w-full h-[4px] bg-white/10 absolute top-[60%] -skew-y-1"></div>
+              <div className="w-full h-[1px] bg-black/40 absolute top-[80%]"></div>
+            </motion.div>
+          )}
+
           {isBlackout && (
             <motion.div 
               initial={{ opacity: 0 }} 
