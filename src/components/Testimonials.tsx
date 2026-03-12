@@ -37,8 +37,8 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-24 px-4 sm:px-6 bg-secondary/20 relative z-10">
-      <div className="max-w-4xl mx-auto">
+    <section className="py-16 md:py-24 px-4 sm:px-6 bg-secondary/20 relative z-10">
+      <div className="max-w-6xl mx-auto">
 
         {/* Section header */}
         <motion.div
@@ -46,7 +46,7 @@ const Testimonials = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
+          className="mb-8 md:mb-12 text-center"
         >
           <p className="section-label mx-auto w-fit">Testimonials</p>
           <h2 className="section-title">
@@ -57,7 +57,7 @@ const Testimonials = () => {
 
         {/* Clean Single-Card Fade Carousel */}
         <div 
-          className="relative min-h-[400px] flex items-center justify-center p-2"
+          className="relative min-h-[320px] md:min-h-[350px] flex items-center justify-center p-2"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
@@ -79,7 +79,7 @@ const Testimonials = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="w-full sm:w-[85%] md:w-[75%] cursor-grab active:cursor-grabbing"
+              className="w-full sm:w-[90%] md:w-[85%] lg:w-[75%] xl:w-[70%] cursor-grab active:cursor-grabbing"
             >
               <div className="card-base p-8 sm:p-12 text-center shadow-card-hover border-primary/10 bg-card">
                 <Quote className="mx-auto text-primary/20 mb-6" size={36} />
@@ -123,7 +123,7 @@ const Testimonials = () => {
 
         {/* Navigation Buttons */}
         {testimonials.length > 1 && (
-          <div className="flex items-center justify-center gap-6 mt-16 relative z-20">
+          <div className="flex items-center justify-center gap-6 mt-6 md:mt-10 relative z-20">
             <button
               onClick={prev}
               className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-200 shadow-sm"
