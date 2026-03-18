@@ -1,4 +1,4 @@
-# Swastik's Dev Hub
+# Swastik Bhardwaj - Portfolio
 
 A cinematic, interactive digital portfolio experience for Swastik Bhardwaj, focusing on high-end animations and a premium developer aesthetic.
 

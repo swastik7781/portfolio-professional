@@ -134,6 +134,15 @@ export const projects = [
     live: "https://bigdaddyproject.vercel.app",
     featured: true,
   },
+  {
+    title: "NewsFlow - News WebApp",
+    description: "A fully responsive and modern News Website Dashboard built using React, React Router, and Tailwind CSS. This application simulates a real-world news platform where users can explore different categories of news through a structured and visually appealing interface.",
+    tech: ["React", "React Router", "Tailwind CSS"],
+    category: "Full Stack" as ProjectCategory,
+    github: "https://github.com/swastik7781/News-Web-App",
+    live: "https://swastiknews.vercel.app/",
+    featured: false,
+  },
 ];
 
 // Timeline items for About section — chronological order
