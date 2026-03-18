@@ -77,14 +77,14 @@ export const skillCategories = [
   },
 ];
 
-export type ProjectCategory = "All" | "Full Stack" | "Machine Learning";
+export type ProjectCategory = "All" | "Full Stack" | "Machine Learning" | "Frontend";
 
 export const projects = [
   {
     title: "Portfolio Website",
     description: "This very portfolio — engineered with React, TypeScript, Framer Motion, and Tailwind CSS. Features a command palette, visitor personalization, custom cursor, easter eggs, and a production-grade contact system.",
     tech: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite"],
-    category: "Full Stack" as ProjectCategory,
+    category: "Frontend" as ProjectCategory,
     github: "https://github.com/swastik7781/portfolio-professional.git",
     live: "https://swastikbhardwaj.vercel.app",
     featured: true,
@@ -136,9 +136,9 @@ export const projects = [
   },
   {
     title: "NewsFlow - News WebApp",
-    description: "A fully responsive and modern News Website Dashboard built using React, React Router, and Tailwind CSS. This application simulates a real-world news platform where users can explore different categories of news through a structured and visually appealing interface.",
+    description: "A responsive News Website Dashboard simulating a real-world platform for exploring categorized news content effortlessly.",
     tech: ["React", "React Router", "Tailwind CSS"],
-    category: "Full Stack" as ProjectCategory,
+    category: "Frontend" as ProjectCategory,
     github: "https://github.com/swastik7781/News-Web-App",
     live: "https://swastiknews.vercel.app/",
     featured: false,

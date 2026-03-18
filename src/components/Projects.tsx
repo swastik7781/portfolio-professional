@@ -5,7 +5,7 @@ import { ExternalLink, Github, Terminal, Cpu, Bug, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { projects, type ProjectCategory } from '@/lib/portfolio-data';
 
-const categories: ProjectCategory[] = ["All", "Full Stack", "Machine Learning"];
+const categories: ProjectCategory[] = ["All", "Full Stack", "Frontend", "Machine Learning"];
 
 const Projects = () => {
   const [filter, setFilter] = useState<ProjectCategory>("All");
