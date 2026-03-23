@@ -33,8 +33,8 @@ const Projects = () => {
       const types = ['text', 'box', 'block', 'window'];
       
       interval = setInterval(() => {
-        let rTop = Math.random() * 95;
-        let rLeft = Math.random() * 95;
+        let rTop = Math.random() * 80;
+        let rLeft = Math.random() * 80;
         let pType = types[Math.floor(Math.random() * types.length)];
         
         setErrorLogs(prev => [...prev.slice(-150), {
@@ -43,8 +43,8 @@ const Projects = () => {
           top: `${rTop}%`,
           left: `${rLeft}%`,
           type: pType,
-          width: pType === 'block' ? `${Math.random() * 40 + 10}vw` : undefined,
-          height: pType === 'block' ? `${Math.random() * 20 + 5}vh` : undefined
+          width: pType === 'block' ? `${Math.random() * 30 + 10}vw` : undefined,
+          height: pType === 'block' ? `${Math.random() * 15 + 5}vh` : undefined
         }]);
       }, 100);
 
@@ -143,7 +143,7 @@ const Projects = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="glitch-target fixed inset-0 z-[9999] pointer-events-auto cursor-none select-none flex flex-col justify-between"
+              className="glitch-target fixed inset-0 w-screen h-[100dvh] z-[9999] pointer-events-auto cursor-none select-none flex flex-col justify-between touch-none"
             >
               <div className="absolute inset-0 bg-primary/5 animate-[pulse_0.15s_ease-in-out_infinite] mix-blend-overlay"></div>
             </motion.div>
@@ -153,9 +153,9 @@ const Projects = () => {
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
-              exit={isResolving && resolveProgress === 100 ? { y: "150vh", rotate: 15, opacity: 0 } : { opacity: 0 }} 
-              transition={{ duration: isResolving && resolveProgress === 100 ? 1 : 0.2, ease: "easeIn" }}
-              className="glitch-target fixed inset-0 z-[9999] flex items-center justify-center flex-col overflow-hidden cursor-pointer"
+              exit={isResolving && resolveProgress === 100 ? { opacity: 0, scale: 0.95 } : { opacity: 0 }} 
+              transition={{ duration: isResolving && resolveProgress === 100 ? 0.8 : 0.2, ease: "easeIn" }}
+              className="glitch-target fixed inset-0 w-screen h-[100dvh] z-[9999] flex items-center justify-center flex-col overflow-hidden cursor-pointer touch-none select-none"
               style={{ backgroundColor: `rgba(0, 0, 0, ${darkness})` }}
               onClick={handleBlackoutClick}
             >
